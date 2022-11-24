@@ -1,7 +1,13 @@
 {
   "name": "blog.ptcookie.dev",
   "version": "0.1.0",
-  "private": true,
+  "description": "DevLog of PtCookie",
+  "license": "MIT",
+  "author": {
+    "name": "Minsup Ju",
+    "email": "dev@ptcookie.dev",
+    "url": "https://blog.ptcookie.dev"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -12,11 +18,19 @@
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.9",
-    "eslint": "8.28.0",
-    "eslint-config-next": "13.0.5",
     "next": "13.0.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "4.9.3"
-  }
+  },
+  "devDependencies": {
+    "eslint": "8.28.0",
+    "eslint-config-next": "13.0.5",
+    "eslint-config-prettier": "8.5.0",
+    "prettier": "2.8.0"
+  },
+  "engines": {
+    "node": "<=14.6.0"
+  },
+  "private": true
 }
