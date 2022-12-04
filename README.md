@@ -1,14 +1,24 @@
 # PtCookie.DevLog
 
 DevLog of PtCookie.
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+## About project
 
-First, run the development server:
+### Framework
 
-```shell
-yarn run dev
-```
+- [Next.js](https://nextjs.org/)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Styling
+
+- [postcss](https://postcss.org/)
+
+### Code quality tools
+
+- [ESLint](https://eslint.org/)
+- [Stylelint](https://stylelint.io/)
+- [Prettier](https://prettier.io/)
+
+## License
+
+MIT &copy; [PtCookie](https://github.com/PtCookie)
