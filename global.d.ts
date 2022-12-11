@@ -23,3 +23,9 @@ type Tag = {
   readonly slug: string;
   readonly name: string;
 };
+
+type Pagination = {
+  page: number;
+  current: boolean;
+  excerpt: boolean;
+};

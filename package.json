@@ -12,7 +12,8 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "next lint",
+        "test": "mocha"
     },
     "dependencies": {
         "@csstools/normalize.css": "^12.0.0",
@@ -33,13 +34,18 @@
         "yaml-loader": "^0.8.0"
     },
     "devDependencies": {
+        "@types/chai": "^4.3.4",
+        "@types/mocha": "^10.0.1",
+        "chai": "^4.3.7",
         "eslint": "8.28.0",
         "eslint-config-next": "13.0.5",
         "eslint-config-prettier": "8.5.0",
+        "mocha": "^10.2.0",
         "prettier": "2.8.0",
         "stylelint": "14.15.0",
         "stylelint-config-prettier": "9.0.4",
-        "stylelint-config-standard": "29.0.0"
+        "stylelint-config-standard": "29.0.0",
+        "ts-node": "^10.9.1"
     },
     "engines": {
         "node": "<=16.8.0"
