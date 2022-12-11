@@ -1,0 +1,11 @@
+base_url: 'https://blog.ptcookie.dev'
+site_title: 'PtCookie.DevLog'
+site_description: 'DevLog of PtCookie'
+site_keywords:
+  - 'Blog'
+  - 'Next.js'
+  - 'TypeScript'
+  - 'CSS'
+posts_per_page: 5
+twitter_account: '@PtCookie78'
+github_account: 'PtCookie'

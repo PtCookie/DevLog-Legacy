@@ -1,0 +1,19 @@
+.default {
+    padding: 4rem 0;
+    height: 100%;
+    display: block;
+
+    @media (min-width: 769px) {
+        display: flex;
+        flex: 1 0 auto;
+    }
+
+    & main {
+        min-height: 100%;
+        display: flex;
+
+        @media (min-width: 769px) {
+            flex: 1 0 auto;
+        }
+    }
+}

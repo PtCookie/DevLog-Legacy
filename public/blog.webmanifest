@@ -1,0 +1,22 @@
+{
+  "short_name": "DevLog",
+  "name": "PtCookie.DevLog",
+  "icons": [
+    {
+      "src": "icon256.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    },
+    {
+      "src": "icon512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/posts",
+  "background_color": "#FFFFFF",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#182d27",
+  "description": "DevLog of PtCookie"
+}
