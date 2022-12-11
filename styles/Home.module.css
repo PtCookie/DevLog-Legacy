@@ -1,5 +1,6 @@
 .container {
     padding: 0 1.5rem;
+    height: 80vh;
     display: flex;
     flex: 1 1 auto;
     justify-content: center;
@@ -16,13 +17,19 @@
     }
 
     & h2 {
+        margin-top: 4rem;
         font-size: 1.75rem;
         font-weight: 400;
         line-height: 1.25;
 
         @media (min-width: 769px) {
+            margin-top: 2rem;
             font-size: 2.25rem;
         }
+    }
+
+    @media (min-width: 769px) {
+        height: 100%;
     }
 }
 

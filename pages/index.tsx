@@ -1,4 +1,5 @@
 import DefaultLayout from '../layout/DefaultLayout';
+import { SocialAccounts } from '../components/SocialAccounts';
 import styles from '../styles/Home.module.css';
 
 export default function Home() {
@@ -11,6 +12,7 @@ export default function Home() {
           </h1>
           <span className={styles.handle}>@PtCookie</span>
           <h2>A DevLog of PtCookie</h2>
+          <SocialAccounts />
         </div>
       </div>
     </DefaultLayout>
