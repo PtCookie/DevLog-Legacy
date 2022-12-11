@@ -12,10 +12,10 @@ export function SocialAccounts() {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <Image src="/images/twitter.svg" alt="Twitter Logo" width={24} height={24} />
+        <Image src="/twitter.svg" alt="Twitter Logo" width={24} height={24} />
       </a>
       <a title="GitHub" href={`https://github.com/${config.github_account}`} target="_blank" rel="noopener noreferrer">
-        <Image src="/images/github.svg" alt="GitHub Logo" width={24} height={24} />
+        <Image src="/github.svg" alt="GitHub Logo" width={24} height={24} />
       </a>
     </div>
   );
