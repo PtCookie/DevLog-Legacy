@@ -1,10 +1,16 @@
 import DefaultLayout from '../layout/DefaultLayout';
 import { SocialAccounts } from '../components/SocialAccounts';
+import BasicMeta from '../components/meta/BasicMeta';
+import OpenGraphMeta from '../components/meta/OpenGraphMeta';
+import TwitterCardMeta from '../components/meta/TwitterCardMeta';
 import styles from '../styles/Home.module.css';
 
 export default function Home() {
   return (
     <DefaultLayout>
+      <BasicMeta url={'/'} />
+      <OpenGraphMeta url={'/'} />
+      <TwitterCardMeta />
       <div className={styles.container}>
         <div>
           <h1>
