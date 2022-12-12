@@ -3,7 +3,7 @@ import React from 'react';
 import config from '../lib/config';
 import styles from '../styles/Components.module.css';
 
-export function SocialAccounts() {
+export default function SocialAccounts() {
   return (
     <div className={styles.social}>
       <a

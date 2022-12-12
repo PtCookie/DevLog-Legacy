@@ -1,3 +1,21 @@
+.pagination {
+    margin: 3rem 0 0;
+    padding: 0;
+    list-style: none;
+
+    & li {
+        margin-right: 1em;
+        display: inline-block;
+        color: #9b9b9b;
+        font-size: 1.25rem;
+    }
+
+    & a[data-active='true'] {
+        color: #222;
+        font-weight: bold;
+    }
+}
+
 .navigation {
     width: 0;
 

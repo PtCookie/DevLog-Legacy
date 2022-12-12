@@ -1,5 +1,5 @@
 import DefaultLayout from '../layout/DefaultLayout';
-import { SocialAccounts } from '../components/SocialAccounts';
+import SocialAccounts from '../components/SocialAccounts';
 import BasicMeta from '../components/meta/BasicMeta';
 import OpenGraphMeta from '../components/meta/OpenGraphMeta';
 import TwitterCardMeta from '../components/meta/TwitterCardMeta';

@@ -1,0 +1,52 @@
+.container {
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    max-width: 1200px;
+    width: 100%;
+
+    & ul {
+        margin: 0;
+        padding: 0;
+    }
+
+    & li {
+        list-style: none;
+    }
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+
+    & li {
+        margin-bottom: 1.5rem;
+    }
+}
+
+.list {
+    flex: 1 0 auto;
+}
+
+.category {
+    display: none;
+
+    & li {
+        margin-bottom: 0.75em;
+    }
+
+    @media (min-width: 769px) {
+        display: block;
+    }
+}
+
+.item {
+    display: inline-block;
+    color: #222;
+
+    & h2 {
+        margin: 0;
+        font-weight: 500;
+    }
+}
