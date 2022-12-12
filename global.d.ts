@@ -3,6 +3,8 @@ declare module '*.yml' {
   export default value;
 }
 
+type SupportedLocale = 'ko' | 'en';
+
 type Config = {
   readonly base_url: string;
   readonly site_title: string;
@@ -28,4 +30,22 @@ type Pagination = {
   page: number;
   current: boolean;
   excerpt: boolean;
+};
+
+type ParsedPostData = {
+  slug: string;
+  title: string;
+  date: string;
+  author: string;
+  tags: string[];
+  fullPath: string;
+};
+
+type PostContent = {
+  readonly slug: string;
+  readonly title: string;
+  readonly date: string;
+  readonly author: string;
+  readonly tags?: string[];
+  readonly fullPath: string;
 };

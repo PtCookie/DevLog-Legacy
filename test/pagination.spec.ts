@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { generatePagination } from '../lib/pagination';
 
 describe('Post pagination', function () {
-  test('excerpt starting and ending page numbers', () => {
+  test('excerpt starting and ending page numbers', function () {
     const pagination = generatePagination(5, 8);
     expect(pagination).to.eql([
       { page: 1, current: false, excerpt: false },
@@ -16,7 +16,7 @@ describe('Post pagination', function () {
     ]);
   });
 
-  test('excerpt ending page numbers', () => {
+  test('excerpt ending page numbers', function () {
     const pagination = generatePagination(2, 8);
     expect(pagination).to.eql([
       { page: 1, current: false, excerpt: false },
@@ -27,7 +27,7 @@ describe('Post pagination', function () {
     ]);
   });
 
-  test('excerpt ending page numbers at 1st page', () => {
+  test('excerpt ending page numbers at 1st page', function () {
     const pagination = generatePagination(1, 8);
     expect(pagination).to.eql([
       { page: 1, current: true, excerpt: false },
@@ -37,7 +37,7 @@ describe('Post pagination', function () {
     ]);
   });
 
-  test('excerpt starting page numbers', () => {
+  test('excerpt starting page numbers', function () {
     const pagination = generatePagination(7, 8);
     expect(pagination).to.eql([
       { page: 1, current: false, excerpt: false },
@@ -48,7 +48,7 @@ describe('Post pagination', function () {
     ]);
   });
 
-  test('excerpt starting page numbers at last page', () => {
+  test('excerpt starting page numbers at last page', function () {
     const pagination = generatePagination(8, 8);
     expect(pagination).to.eql([
       { page: 1, current: false, excerpt: false },

@@ -12,7 +12,7 @@ function generateTagMap(): { [key: string]: Tag } {
   return result;
 }
 
-export function getTag(slug: string) {
+export function getTag(slug: string): Tag {
   return tagMap[slug];
 }
 

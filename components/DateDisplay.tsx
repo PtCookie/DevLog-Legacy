@@ -4,7 +4,7 @@ import styles from '../styles/Components.module.css';
 
 type Props = {
   date: Date;
-  locale?: string;
+  locale?: SupportedLocale;
 };
 
 export default function DateDisplay({ date, locale = 'ko' }: Props) {

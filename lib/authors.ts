@@ -12,6 +12,6 @@ function generateAuthorMap(): { [key: string]: Author } {
   return result;
 }
 
-export function getAuthor(slug: string) {
+export function getAuthor(slug: string): Author {
   return authorMap[slug];
 }
