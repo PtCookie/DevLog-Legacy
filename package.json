@@ -12,7 +12,8 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint",
+        "lint": "next lint && stylelint --fix ./styles/**/*.css",
+        "format": "prettier --write ./**/*.ts ./**/*.tsx",
         "test": "mocha"
     },
     "dependencies": {
