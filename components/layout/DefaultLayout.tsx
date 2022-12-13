@@ -17,9 +17,7 @@ export default function DefaultLayout({ children }: Props) {
         <link rel="manifest" href="/blog.webmanifest" />
         <link rel="apple-touch-icon" href="/icon256.png" />
       </Head>
-      <nav>
-        <Navigation />
-      </nav>
+      <Navigation />
       <main>{children}</main>
     </div>
   );

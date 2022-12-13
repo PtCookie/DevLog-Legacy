@@ -1,9 +1,10 @@
 .default {
-    padding: 4rem 0;
+    padding: 5rem 0;
     height: 100%;
     display: block;
 
     @media (min-width: 769px) {
+        padding: 4rem 0;
         display: flex;
         flex: 1 0 auto;
     }

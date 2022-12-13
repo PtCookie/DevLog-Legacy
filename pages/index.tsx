@@ -14,7 +14,7 @@ export default function Home() {
       <div className={styles.container}>
         <div>
           <h1>
-            Hello, This is PtCookie.DevLog<span className={styles.fancy}>.</span>
+            Hello, This is PtCookie<span className={styles.fancy}>.</span>DevLog
           </h1>
           <span className={styles.handle}>@PtCookie</span>
           <h2>A DevLog of PtCookie</h2>
