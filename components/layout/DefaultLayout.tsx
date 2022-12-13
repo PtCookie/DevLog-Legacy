@@ -13,9 +13,9 @@ export default function DefaultLayout({ children }: Props) {
       <Head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="manifest" href="/public/blog.webmanifest" />
-        <link rel="apple-touch-icon" href="/public/icon256.png" />
-        <meta name="theme-color" content="#fff" />
+        <meta name="theme-color" content="#182d27" />
+        <link rel="manifest" href="/blog.webmanifest" />
+        <link rel="apple-touch-icon" href="/icon256.png" />
       </Head>
       <nav>
         <Navigation />
