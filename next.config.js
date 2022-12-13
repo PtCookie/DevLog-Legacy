@@ -4,11 +4,15 @@
  * @type {import('next').NextConfig}
  **/
 const nextConfig = {
-  reactStrictMode: true,
-  swcMinify: true,
   eslint: {
     dirs: ['pages', 'components', 'lib', 'layout'],
   },
+  i18n: {
+    locales: ['ko', 'en'],
+    defaultLocale: 'ko',
+  },
+  reactStrictMode: true,
+  swcMinify: true,
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     config.module.rules.push(
       ...[

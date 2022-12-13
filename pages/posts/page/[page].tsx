@@ -32,13 +32,13 @@ export default function Page({ posts, tags, pagination, page }: Props) {
   );
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   const page = parseInt(params!.page as string);
-  const posts = listPostContent(page, config.posts_per_page);
+  const posts = listPostContent(page, config.posts_per_page, locale as SupportedLocale);
   const tags = listTags();
   const pagination = {
     current: page,
-    pages: Math.ceil(countPosts() / config.posts_per_page),
+    pages: Math.ceil(countPosts(locale as SupportedLocale) / config.posts_per_page),
   };
 
   return {
@@ -51,11 +51,26 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   };
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const pages = Math.ceil(countPosts() / config.posts_per_page);
-  const paths = Array.from(Array(pages - 1).keys()).map((it) => ({
-    params: { page: (it + 2).toString() },
-  }));
+export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
+  const paths: Array<{ params: { page: string }; locale?: string }> = [];
+
+  if (locales instanceof Array) {
+    for (const locale of locales) {
+      const pages = Math.ceil(countPosts(locale as SupportedLocale) / config.posts_per_page);
+      const localePaths = Array.from({ length: pages - 1 }, (_, page) => {
+        return { params: { page: (page + 2).toString() }, locale };
+      });
+
+      paths.push(...localePaths);
+    }
+  } else {
+    const pages = Math.ceil(countPosts() / config.posts_per_page);
+    const localePaths = Array.from({ length: pages - 1 }, (_, page) => {
+      return { params: { page: (page + 2).toString() } };
+    });
+
+    paths.push(...localePaths);
+  }
 
   return {
     paths: paths,

@@ -22,14 +22,6 @@ export type Props = {
   source: MDXRemoteSerializeResult;
 };
 
-const slugToPostContent = ((postContents) => {
-  const hash: Record<string, PostContent> = {};
-
-  postContents.forEach((content) => (hash[content.slug] = content));
-
-  return hash;
-})(fetchPostContent());
-
 export default function Post({ title, dateString, slug, tags, author, description = '', source }: Props) {
   useEffect(() => {
     highlight.configure({
@@ -52,8 +44,24 @@ export default function Post({ title, dateString, slug, tags, author, descriptio
   );
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = fetchPostContent().map((post) => '/posts/' + post.slug);
+export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
+  const paths: Array<{ params: { post: string }; locale?: string }> = [];
+
+  if (locales instanceof Array) {
+    for (const locale of locales) {
+      const postPath = fetchPostContent(locale as SupportedLocale).map((post) => {
+        return { params: { post: post.slug }, locale };
+      });
+
+      paths.push(...postPath);
+    }
+  } else {
+    const postPath = fetchPostContent().map((post) => {
+      return { params: { post: '/posts/' + post.slug } };
+    });
+
+    paths.push(...postPath);
+  }
 
   return {
     paths,
@@ -61,8 +69,15 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   const slug = params!.post as string;
+  const postContents = fetchPostContent(locale as SupportedLocale);
+  const slugToPostContent: Record<string, PostContent> = {};
+
+  for (const postContent of postContents) {
+    slugToPostContent[postContent.slug] = postContent;
+  }
+
   const source = readFileSync(slugToPostContent[slug].fullPath, 'utf-8');
   const { content, data } = matter(source, {
     engines: {

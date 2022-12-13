@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React from 'react';
 import { serif, monospace } from '../lib/fonts';
 import { getAuthor } from '../lib/authors';
@@ -25,6 +26,7 @@ type Props = {
 };
 
 export default function PostLayout({ title, date, slug, author, tags, description = '', children }: Props) {
+  const { locale } = useRouter();
   const keywords = tags.map((keyword) => getTag(keyword).name);
   const authorName = getAuthor(author).name;
 
@@ -47,7 +49,7 @@ export default function PostLayout({ title, date, slug, author, tags, descriptio
             <h1>{title}</h1>
             <div className={styles.metadata}>
               <div>
-                <DateDisplay date={date} />
+                <DateDisplay date={date} locale={locale as SupportedLocale} />
               </div>
               <div>
                 <Author author={getAuthor(author)} />

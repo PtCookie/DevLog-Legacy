@@ -18,9 +18,6 @@ type Props = {
   };
 };
 
-// TODO Get locale configuration.
-const locale = undefined;
-
 export default function Index({ posts, tag, pagination, page }: Props) {
   const url = `/posts/tags/${tag.name}` + (page ? `/${page}` : '');
   const title = tag.name;
@@ -35,14 +32,19 @@ export default function Index({ posts, tag, pagination, page }: Props) {
   );
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   const queries = params!.slug as string[];
   const [slug, page] = [queries[0], queries[1]];
-  const posts = listPostContent(page ? parseInt(page as string) : 1, config.posts_per_page, locale, slug);
+  const posts = listPostContent(
+    page ? parseInt(page as string) : 1,
+    config.posts_per_page,
+    locale as SupportedLocale,
+    slug,
+  );
   const tag = getTag(slug);
   const pagination = {
     current: page ? parseInt(page as string) : 1,
-    pages: Math.ceil(countPosts(locale, slug) / config.posts_per_page),
+    pages: Math.ceil(countPosts(locale as SupportedLocale, slug) / config.posts_per_page),
   };
   const props: {
     posts: PostContent[];
@@ -60,20 +62,34 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   };
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = listTags().flatMap((tag) => {
-    const pages = Math.ceil(countPosts(locale, tag.slug) / config.posts_per_page);
+export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
+  const paths: Array<{ params: { slug: string[] }; locale?: string }> = [];
 
-    return Array.from(Array(pages).keys()).map((page) =>
-      page === 0
-        ? {
-            params: { slug: [tag.slug] },
-          }
-        : {
-            params: { slug: [tag.slug, (page + 1).toString()] },
-          },
-    );
-  });
+  if (locales instanceof Array) {
+    for (const locale of locales) {
+      const slugPath = listTags().flatMap((tag) => {
+        const pages = Math.ceil(countPosts(locale as SupportedLocale, tag.slug) / config.posts_per_page);
+
+        return Array.from({ length: pages }, (_, page) => {
+          return page === 0
+            ? { params: { slug: [tag.slug] }, locale }
+            : { params: { slug: [tag.slug, (page + 1).toString()] }, locale };
+        });
+      });
+
+      paths.push(...slugPath);
+    }
+  } else {
+    const slugPath = listTags().flatMap((tag) => {
+      const pages = Math.ceil(countPosts(undefined, tag.slug) / config.posts_per_page);
+
+      return Array.from({ length: pages }, (_, page) => {
+        return page === 0 ? { params: { slug: [tag.slug] } } : { params: { slug: [tag.slug, (page + 1).toString()] } };
+      });
+    });
+
+    paths.push(...slugPath);
+  }
 
   return {
     paths: paths,
