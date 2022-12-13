@@ -1,13 +1,16 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
+import { useEffect } from 'react';
 import { readFileSync } from 'node:fs';
 import { parseISO } from 'date-fns';
 import matter from 'gray-matter';
 import yaml from 'js-yaml';
 import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
+import highlight from 'highlight.js';
 import config from '../../lib/config';
 import { fetchPostContent } from '../../lib/posts';
 import PostLayout from '../../layout/PostLayout';
+import 'highlight.js/styles/base16/tomorrow-night.css';
 
 export type Props = {
   title: string;
@@ -28,6 +31,13 @@ const slugToPostContent = ((postContents) => {
 })(fetchPostContent());
 
 export default function Post({ title, dateString, slug, tags, author, description = '', source }: Props) {
+  useEffect(() => {
+    highlight.configure({
+      ignoreUnescapedHTML: true,
+    });
+    highlight.highlightAll();
+  }, []);
+
   return (
     <PostLayout
       title={title}
