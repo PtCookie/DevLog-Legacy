@@ -8,8 +8,8 @@ type Props = {
 export default function TagButton({ tag }: Props) {
   return (
     <>
-      <Link href={'/posts/tags/[[...slug]]'} as={`/posts/tags/${tag.slug}`}>
-        <a className={styles.button}>#{tag.name}</a>
+      <Link href={'/posts/tags/[[...slug]]'} className={styles.button} as={`/posts/tags/${tag.slug}`}>
+        #{tag.name}
       </Link>
     </>
   );

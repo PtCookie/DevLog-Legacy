@@ -38,6 +38,7 @@ type ParsedPostData = {
   date: string;
   author: string;
   tags: string[];
+  description: string;
   fullPath: string;
 };
 
@@ -47,5 +48,6 @@ type PostContent = {
   readonly date: string;
   readonly author: string;
   readonly tags?: string[];
+  readonly description?: string;
   readonly fullPath: string;
 };
