@@ -1,4 +1,4 @@
-import DefaultLayout from '../layout/DefaultLayout';
+import DefaultLayout from '../components/layout/DefaultLayout';
 import SocialAccounts from '../components/SocialAccounts';
 import BasicMeta from '../components/meta/BasicMeta';
 import OpenGraphMeta from '../components/meta/OpenGraphMeta';

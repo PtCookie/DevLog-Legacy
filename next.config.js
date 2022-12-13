@@ -4,9 +4,6 @@
  * @type {import('next').NextConfig}
  **/
 const nextConfig = {
-  eslint: {
-    dirs: ['pages', 'components', 'lib', 'layout'],
-  },
   i18n: {
     locales: ['ko', 'en'],
     defaultLocale: 'ko',

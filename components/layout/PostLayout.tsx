@@ -1,19 +1,19 @@
 import { useRouter } from 'next/router';
 import React from 'react';
-import { serif, monospace } from '../lib/fonts';
-import { getAuthor } from '../lib/authors';
-import { getTag } from '../lib/tags';
+import { serif, monospace } from '../../lib/fonts';
+import { getAuthor } from '../../lib/authors';
+import { getTag } from '../../lib/tags';
 import DefaultLayout from './DefaultLayout';
-import BasicMeta from '../components/meta/BasicMeta';
-import JsonLdMeta from '../components/meta/JsonLdMeta';
-import OpenGraphMeta from '../components/meta/OpenGraphMeta';
-import TwitterCardMeta from '../components/meta/TwitterCardMeta';
-import Author from '../components/Author';
-import Copyright from '../components/Copyright';
-import DateDisplay from '../components/DateDisplay';
-import SocialAccounts from '../components/SocialAccounts';
-import TagButton from '../components/TagButton';
-import styles from '../styles/Layout.module.css';
+import BasicMeta from '../meta/BasicMeta';
+import JsonLdMeta from '../meta/JsonLdMeta';
+import OpenGraphMeta from '../meta/OpenGraphMeta';
+import TwitterCardMeta from '../meta/TwitterCardMeta';
+import Author from '../Author';
+import Copyright from '../Copyright';
+import DateDisplay from '../DateDisplay';
+import SocialAccounts from '../SocialAccounts';
+import TagButton from '../TagButton';
+import styles from '../../styles/Layout.module.css';
 
 type Props = {
   title: string;

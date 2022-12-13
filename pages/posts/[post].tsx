@@ -9,7 +9,7 @@ import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import highlight from 'highlight.js';
 import config from '../../lib/config';
 import { fetchPostContent } from '../../lib/posts';
-import PostLayout from '../../layout/PostLayout';
+import PostLayout from '../../components/layout/PostLayout';
 import 'highlight.js/styles/base16/tomorrow-night.css';
 
 export type Props = {
