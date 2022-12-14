@@ -4,6 +4,7 @@
     width: 100vw;
     height: 4rem;
     background-color: #182d27;
+    opacity: 0.8;
     z-index: 1;
 
     &[data-active='true'] {
@@ -11,6 +12,7 @@
         top: auto;
         width: auto;
         height: auto;
+        opacity: 1;
     }
 
     @media (min-width: 769px) {
@@ -19,6 +21,7 @@
         width: auto;
         height: auto;
         background-color: rgba(0 0 0 / 0%);
+        opacity: 1;
         z-index: auto;
     }
 }
@@ -80,6 +83,10 @@
     & li {
         margin-bottom: 1.75rem;
         padding: 0 1.5rem 0 0;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 1rem;
         font-size: 2rem;
 
         &:last-child {
@@ -88,6 +95,7 @@
 
         @media (min-width: 769px) {
             padding: 0;
+            gap: 0.5rem;
             font-size: 1rem;
         }
     }
@@ -101,6 +109,14 @@
 
 .link {
     text-decoration: underline;
+}
+
+.icon {
+    font-size: 2rem;
+
+    @media (min-width: 769px) {
+        font-size: 1.25rem;
+    }
 }
 
 @keyframes slide-in {
