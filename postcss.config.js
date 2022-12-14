@@ -7,7 +7,6 @@ const postcssConfig = {
       },
       stage: 3,
       features: {
-        'custom-properties': false,
         'nesting-rules': true,
       },
     },

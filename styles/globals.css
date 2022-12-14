@@ -4,13 +4,17 @@ body {
     margin: 0;
 }
 
+* {
+    box-sizing: border-box;
+}
+
 a {
     color: inherit;
     text-decoration: none;
 }
 
-* {
-    box-sizing: border-box;
+pre code {
+    border-radius: 0.75rem;
 }
 
 @media (prefers-color-scheme: dark) {

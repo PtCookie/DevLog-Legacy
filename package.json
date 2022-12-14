@@ -12,7 +12,7 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint && stylelint --fix ./styles/**/*.css",
+        "lint": "next lint --fix && stylelint --fix ./styles/**/*.css",
         "format": "prettier --write ./**/*.ts ./**/*.tsx",
         "test": "mocha"
     },
