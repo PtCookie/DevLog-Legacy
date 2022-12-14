@@ -27,10 +27,6 @@
             font-size: 2.25rem;
         }
     }
-
-    @media (min-width: 769px) {
-        height: 100%;
-    }
 }
 
 .fancy {

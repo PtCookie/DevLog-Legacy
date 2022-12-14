@@ -166,6 +166,7 @@
 
     &[data-active='true'] {
         display: flex;
+        animation: fade-in 200ms linear 0s normal forwards;
     }
 
     & li {
@@ -174,5 +175,15 @@
 
     & li[data-active='true'] {
         text-decoration: underline;
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
     }
 }
