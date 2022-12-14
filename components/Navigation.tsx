@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { FaRegNewspaper, FaRegAddressCard } from 'react-icons/fa';
+import { FcHome, FcReading } from 'react-icons/fc';
 import BurgerButton from './BurgerButton';
 import LocaleSelector from './LocaleSelector';
 import styles from '../styles/Navigation.module.css';
@@ -20,15 +20,15 @@ export default function Navigation() {
         <ul>
           <li>
             <Link href="/" className={router.pathname === '/' ? styles.link : undefined}>
-              about
+              home
             </Link>
-            <FaRegAddressCard className={styles.icon} />
+            <FcHome className={styles.icon} />
           </li>
           <li>
             <Link href="/posts" className={router.pathname.startsWith('/posts') ? styles.link : undefined}>
-              blog
+              posts
             </Link>
-            <FaRegNewspaper className={styles.icon} />
+            <FcReading className={styles.icon} />
           </li>
         </ul>
       </div>
