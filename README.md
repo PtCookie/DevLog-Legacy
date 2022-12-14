@@ -1,7 +1,8 @@
 # PtCookie.DevLog
 
 DevLog of PtCookie.
-This project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+Bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## About project
 
@@ -11,7 +12,18 @@ This project bootstrapped with [`create-next-app`](https://github.com/vercel/nex
 
 ### Styling
 
-- [postcss](https://postcss.org/)
+- [PostCSS](https://postcss.org/)
+- [normalize.css](https://csstools.github.io/normalize.css/)
+- [React Icons](https://react-icons.github.io/react-icons/)
+
+### Data fetching
+
+- [next-mdx-remote](https://github.com/hashicorp/next-mdx-remote/)
+
+### Test
+
+- [Mocha](https://mochajs.org/)
+- [Chai](https://www.chaijs.com/)
 
 ### Code quality tools
 
