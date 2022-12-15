@@ -1,5 +1,5 @@
-import Image from 'next/image';
 import React from 'react';
+import { BsGithub, BsTwitter } from 'react-icons/bs';
 import config from '../lib/config';
 import styles from '../styles/Components.module.css';
 
@@ -12,10 +12,10 @@ export default function SocialAccounts() {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <Image src="/twitter.svg" alt="Twitter Logo" width={24} height={24} />
+        <BsTwitter size={'1.5rem'} />
       </a>
       <a title="GitHub" href={`https://github.com/${config.github_account}`} target="_blank" rel="noopener noreferrer">
-        <Image src="/github.svg" alt="GitHub Logo" width={24} height={24} />
+        <BsGithub size={'1.5rem'} />
       </a>
     </div>
   );
