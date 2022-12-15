@@ -1,8 +1,10 @@
 tags:
-  - slug: post
-    name: Post
   - slug: next_js
     name: Next.js
+  - slug: react_js
+    name: React.js
+  - slug: node_js
+    name: Node.js
   - slug: typescript
     name: TypeScript
   - slug: css

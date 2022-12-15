@@ -181,4 +181,24 @@
         display: block;
         text-align: center;
     }
+
+    & figure {
+        margin: 0;
+        position: relative;
+
+        & figcaption {
+            padding: 0.25rem 0.5rem;
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            border-radius: 0.5rem;
+            background-color: #ddd;
+            font-size: 0.875rem;
+            text-align: right;
+
+            & a {
+                color: #000;
+            }
+        }
+    }
 }
