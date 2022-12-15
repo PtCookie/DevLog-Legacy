@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import DefaultLayout from '../components/layout/DefaultLayout';
 import SocialAccounts from '../components/SocialAccounts';
 import BasicMeta from '../components/meta/BasicMeta';
@@ -6,6 +7,8 @@ import TwitterCardMeta from '../components/meta/TwitterCardMeta';
 import styles from '../styles/Home.module.css';
 
 export default function Home() {
+  const { locale } = useRouter();
+
   return (
     <DefaultLayout>
       <BasicMeta url={'/'} />
@@ -14,7 +17,9 @@ export default function Home() {
       <div className={styles.container}>
         <div>
           <h1>
-            Hello, This is PtCookie<span className={styles.fancy}>.</span>DevLog
+            {locale === 'ko' ? '안녕하세요,' : 'Hello, This is'}
+            &nbsp;PtCookie<span className={styles.fancy}>.</span>DevLog
+            {locale === 'ko' ? ' 입니다' : ''}
           </h1>
           <span className={styles.handle}>@PtCookie</span>
           <h2>A DevLog of PtCookie</h2>
