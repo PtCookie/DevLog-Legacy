@@ -1,0 +1,189 @@
+---
+slug: postcss-in-nextjs
+title: Next.js에서 PostCSS 사용하기
+date: 2021-08-27
+author: ptcookie
+tags:
+  - next_js
+  - css
+description: Next.js와 styled-jsx에 PostCSS를 적용해보았습니다.
+---
+
+![PostCSS](/images/postcss-in-nextjs.png)
+
+## PostCSS, A tool for transforming CSS with JavaScript
+
+[PostCSS](https://postcss.org/) 는 CSS 전처리기로,
+javascript 기반의 플러그인을 통해 스타일을 처리합니다.
+
+이전부터 [Sass](https://sass-lang.com/), [Less](https://lesscss.org/) 등
+다양한 CSS 전처리기가 있다는 것은 알고 있었지만, 각자의 독자적인 문법이 있어 사용을 지양해 왔습니다.
+
+그러던 중 PostCSS 에 대해 알게 되었습니다.
+
+이름에서부터 알 수 있듯이 PostCSS 는 차후 CSS 표준에 도입될 내용들을 지원합니다.
+미래의 CSS 를 지향하고 있기 때문에 CSS 표준 문법에서 크게 벗어나지 않아서 한 번 사용해봐야겠다고 생각했습니다.
+
+## PostCSS Plugin
+
+PostCSS 에 대해 공부하던 중, 처음으로 알게 된 사실은 PostCSS 자체는 특별한 기능이 없고,
+플러그인들을 통해 기능을 추가할 수 있다는 점이었습니다.
+
+앞서 언급한 미래의 CSS 는 [PostCSS Preset Env](https://preset-env.cssdb.org/) 의 기능이고,
+-webkit, -moz 등 vendor prefix 를 적용해 주는 것은 [Autoprefixer](https://github.com/postcss/autoprefixer) 의 기능입니다.
+
+그 외에도 Sass 의 중첩과 같은 기능을 지원하는 [PostCSS Nested](https://github.com/postcss/postcss-nested),
+[stylelint](https://stylelint.io/) 같은 linter 지원,
+Sass 나 Less 등 다른 전처리기와 함께 사용할 수 있게 해주는 플러그인 등 다양한 플러그인이 존재합니다.
+
+## PostCSS in NextJS
+
+Next.js 에는 PostCSS 가 내장되어 있습니다.
+Next.js 의 기본 PostCSS 설정은 아래와 같습니다.
+
+```javascript
+// postcss.config.js
+
+module.exports = {
+  plugins: {
+    'postcss-flexbugs-fixes': {},
+    'postcss-preset-env': {
+      autoprefixer: {
+        flexbox: 'no-2009',
+      },
+      stage: 3,
+      features: {
+        'custom-properties': false,
+      },
+    },
+  },
+};
+```
+
+적용되어 있는 플러그인은 아래와 같습니다.
+
+- [PostCSS Flexbugs Fixes](https://github.com/luisrudge/postcss-flexbugs-fixes)
+  flex 속성과 관련된 버그를 고쳐주는 플러그인입니다.
+- [PostCSS Preset Env](https://preset-env.cssdb.org/)
+  미래의 CSS 를 사용할 수 있게 해주는 플러그인입니다.
+
+적용된 PostCSS Preset Env 의 속성은
+
+- **autoprefixer** flexbox no-2009 : flexbox 속성에 대해 IE 10 버전까지 vendor prefix 를 제공합니다.
+
+- **stage** 3 : Stage 3(Candidate) 의 CSS 문법까지 하위 호환 되도록 polyfill 합니다.
+
+- **custom properties** 제외 : 특정 값을 변수로 지정해 사용하는 기능을 제거합니다.
+
+```css
+img {
+  --some-length: 32px;
+
+  height: var(--some-length);
+  width: var(--some-length);
+}
+```
+
+위의 --some-length 와 같은 기능을 제거합니다.
+
+## Customize PostCSS in NextJS
+
+기본 설정으로 충분하겠지만, 추가적인 설정을 적용해보기로 하였습니다.
+Next.js 의 공식 문서에 따르면, PostCSS 설정 파일을 만들게 되면 Next.js 의 기본 설정이 무시된다고 합니다.
+따라서 위의 기본 설정 내용을 복사하고, 필요한 npm 패키지를 설치하였습니다.
+
+```shell
+npm install postcss postcss-flexbugs-fixes postcss-preset-env
+```
+
+추가적인 PostCSS 플러그인과 styled-jsx 에서 PostCSS 를 사용하기 위한 플러그인을 설치하였습니다.
+
+```shell
+npm install postcss-import styled-jsx-plugin-postcss
+```
+
+- [postcss-import](https://github.com/postcss/postcss-import)
+  CSS 의 `@import` 를 해당 파일로 합쳐 주는 플러그인입니다.
+- [styled-jsx-plugin-postcss](https://github.com/giuseppeg/styled-jsx-plugin-postcss)
+  styled-jsx 에서 PostCSS 를 사용하기 위한 styled-jsx 의 플러그인입니다.
+
+플러그인 설치 후 설정 파일을 작성하였습니다.
+
+```javascript
+// postcss.config.js
+
+module.exports = {
+  plugins: {
+    'postcss-import': {},
+    'postcss-flexbugs-fixes': {},
+    'postcss-preset-env': {
+      autoprefixer: {
+        flexbox: 'no-2009',
+      },
+      stage: 3,
+      features: {
+        'custom-properties': false,
+        'nesting-rules': true,
+      },
+    },
+  },
+};
+```
+
+설정 파일을 작성하던 중 알게 된 사실인데, PostCSS 는 설정 파일의 플러그인을 순서대로 읽어들인다고 합니다.
+따라서 플러그인을 나열하는 순서가 중요하며, 해당 플러그인의 문서를 참조하는 것이 좋다고 합니다.
+
+postcss-import 의 문서에 따르면 CSS 파일을 합치고 다른 플러그인을 통해 처리하는 게 좋다고 하니 가장 처음으로 배치하였고,
+그 후에 Next.js 의 기본 설정을 적용하였습니다. 추가로 Sass 에서 가장 관심있는 부분이었던 CSS 중첩 기능을 활성화하였습니다.
+
+styled-jsx 에 플러그인을 적용하려면 babel 설정을 추가해야 합니다. 공식 문서를 참조하여 설정 파일을 작성하였습니다.
+
+```javascript
+// babel.config.js
+
+module.exports = {
+  presets: [
+    [
+      'next/babel',
+      {
+        'styled-jsx': {
+          plugins: ['styled-jsx-plugin-postcss'],
+        },
+      },
+    ],
+  ],
+};
+```
+
+설정 후 적용해 보았습니다.
+
+```css
+a {
+  color: #9b9b9b;
+  text-decoration: none;
+  transition: color 0.3s ease;
+
+  &:active,
+  &:hover {
+    color: #000;
+  }
+}
+```
+
+```tsx
+<style jsx>
+  {`
+    ...
+    .active {
+      color: #222;
+      & ul {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    ...
+  `}
+</style>
+```
+
+문제없이 적용되는 것을 확인할 수 있었습니다.

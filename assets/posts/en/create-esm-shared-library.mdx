@@ -1,0 +1,441 @@
+---
+slug: create-esm-shared-library
+title: Create ESM shared library
+date: 2022-02-12
+author: ptcookie
+tags:
+  - node_js
+  - typescript
+description: While looking for subject of monorepo, I decided to create basic application which invoke API and do something.
+---
+
+<figure>
+  <img src="/images/create-esm-shared-library.jpg" alt="create-esm-shared-library" />
+  <figcaption>Photo by&nbsp;<a href="https://unsplash.com/@alfonsmc10?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Alfons Morales</a>&nbsp;on&nbsp;<a href="https://unsplash.com/@alfonsmc10?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></figcaption>
+</figure>
+
+While looking for subject of monorepo, I decided to create basic application which invoke API and do something. So I look around at [Public APIs](https://github.com/public-apis/public-apis), and select exchange API to use. Among those APIs, I choose [Free Currency Rates API](https://github.com/fawazahmed0/currency-api#readme).
+
+## Initialize package
+
+In previous root repository, I will save my shared libraries in `packages` folder, so create `exchange-api` package which invoke exchange API, under it.
+
+```json
+// packages/exchange-api/package.json
+{
+    "name": "exchange-api",
+
+    ...
+
+    "type": "module",
+
+    ...
+
+    "exports": "./lib/index.js",
+    "types": "lib",
+    "files": [
+        "lib"
+    ]
+}
+```
+
+As this ESM package, set `"type": "module"`, use `exports` instead of `main`. TypeScript built outputs will be laid in`lib`, and add `types` and `files` for other packages.
+
+Add `node-fetch` for API invocation, `date-fns` for date format, and `typescript`.
+
+```shell
+yarn workspace exchange-api add date-fns node-fetch
+yarn workspace exchange-api add -D typescript
+```
+
+Create `tsconfig.json`.
+
+```json
+// packages/exchange-api/tsconfig.json
+{
+    "extends": "../../tsconfig.json",
+    "include": [
+        "**/*.js",
+        "**/*.ts"
+    ]
+}
+```
+
+It will refer to root `tsconfig.json`. And one more config file for TypeScript build.
+
+```json
+// packages/exchange-api/tsconfig.build.json
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "noEmit": false,
+        "outDir": "./lib",
+        "newLine": "lf",
+        "declaration": true
+    },
+    "include": [
+        "src"
+    ]
+}
+```
+
+Input files in `src`, output files to `lib`. Also emit type declarations.
+
+Add `build` script.
+
+```json
+// packages/exchange-api/package.json
+{
+    ...
+
+    "scripts": {
+        "build": "tsc -p ./tsconfig.build.json"
+    },
+
+    ...
+}
+```
+
+Now, let's create package.
+
+## Build package
+
+### 1. RateDate.ts
+
+First, create class to handle date.
+
+```typescript
+// packages/exchange-api/src/RateDate.ts
+import { format } from 'date-fns';
+
+class RateDate {
+  readonly #date: Date;
+
+  constructor(value: number | string | Date) {
+    this.#date = new Date(value);
+  }
+
+  toString(): string {
+    return format(this.#date, 'yyyy-MM-dd');
+  }
+}
+
+export default RateDate;
+```
+
+It will creat native `Date` object from input and format date to string by `date-fns`.
+Set native object to be private through private field of ES2019 syntax, and since it doesn't need to be changed use `readonly` property of TypeScript.
+
+Now create function to invoke API.
+
+### 2. exchange.ts
+
+Import `RateDate` class and `node-fetch`.
+
+```typescript
+// packages/exchange-api/src/exchange.ts
+import fetch from 'node-fetch';
+
+import RateDate from './RateDate.js';
+```
+
+Set types and constants for API invocation.
+
+```typescript
+// packages/exchange-api/src/exchange.ts
+...
+
+type ApiVersion = number;
+type Currency = string;
+type Extension = 'min.json' | 'json';
+
+const apiEndpoint = 'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api';
+const apiVersion: ApiVersion = 1;
+const extension: Extension = 'json';
+```
+
+And create function which calls API and calculates currency.
+
+```typescript
+// packages/exchange-api/src/exchange.ts
+...
+
+async function exchange(
+  amount: number,
+  from: Currency = 'krw',
+  to: Currency = 'usd',
+  date: number | string | Date = 'latest',
+): Promise<{
+  rate: number;
+  amount: number;
+} | void> {
+  const dateStr = date !== 'latest' ? new RateDate(date).toString() : date;
+  const fromLowerCase = from.toLowerCase();
+  const toLowerCase = to.toLowerCase();
+  const apiURLString = `${apiEndpoint}@${apiVersion}/${dateStr}/currencies/${fromLowerCase}/${toLowerCase}.${extension}`;
+  const apiURL = new URL(apiURLString);
+
+  try {
+    const apiResponse = await fetch(apiURL.toString());
+
+    if (apiResponse.status !== 200) {
+      return {
+        rate: 0,
+        amount: 0,
+      };
+    } else {
+      const convertedResponse = (await apiResponse.json()) as { [key: string]: string | number };
+      const exchangeRate = convertedResponse[toLowerCase] as number;
+
+      return {
+        rate: exchangeRate,
+        amount: Number(amount) * exchangeRate,
+      };
+    }
+  } catch (error: unknown) {
+    console.log("Can't fetch API return.");
+    console.log((error as Error).toString());
+  }
+}
+
+export default exchange;
+```
+
+Default currency to exchange is from `krw` to `usd`.
+
+Date will be `latest` basically, other dates will be formatted by `toString` function of `RateDate`. Compose these constants to build URI of API endpoint, and invoke it.
+
+Use `async/await` in `try/catch`.
+
+If it is failed to call, function returns `void`, and logs error. If it is success to call but response code is not `200`, exchange rate and amount will be `0`.
+
+If invocation successed, return exchange rate and calculated exchange amount.
+
+```typescript
+// packages/exchange-api/src/exchange.ts
+import fetch from 'node-fetch';
+
+import RateDate from './RateDate.js';
+
+type ApiVersion = number;
+type Currency = string;
+type Extension = 'min.json' | 'json';
+
+const apiEndpoint = 'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api';
+const apiVersion: ApiVersion = 1;
+const extension: Extension = 'json';
+
+async function exchange(
+  amount: number,
+  from: Currency = 'krw',
+  to: Currency = 'usd',
+  date: number | string | Date = 'latest',
+): Promise<{
+  rate: number;
+  amount: number;
+} | void> {
+  const dateStr = date !== 'latest' ? new RateDate(date).toString() : date;
+  const fromLowerCase = from.toLowerCase();
+  const toLowerCase = to.toLowerCase();
+  const apiURLString = `${apiEndpoint}@${apiVersion}/${dateStr}/currencies/${fromLowerCase}/${toLowerCase}.${extension}`;
+  const apiURL = new URL(apiURLString);
+
+  try {
+    const apiResponse = await fetch(apiURL.toString());
+
+    if (apiResponse.status !== 200) {
+      return {
+        rate: 0,
+        amount: 0,
+      };
+    } else {
+      const convertedResponse = (await apiResponse.json()) as { [key: string]: string | number };
+      const exchangeRate = convertedResponse[toLowerCase] as number;
+
+      return {
+        rate: exchangeRate,
+        amount: Number(amount) * exchangeRate,
+      };
+    }
+  } catch (error: unknown) {
+    console.log("Can't fetch API return.");
+    console.log((error as Error).toString());
+  }
+}
+
+export default exchange;
+```
+
+Completed `exchange` function.
+
+### 3. index.ts
+
+Package will be completed with entry point `index.js`, set in `package.json`
+
+```typescript
+// packages/exchange-api/src/index.ts
+import exchange from './exchange.js';
+
+export { exchange as default };
+```
+
+## Test package
+
+### 1. Configuration
+
+Use [Jest](https://jestjs.io/) for test package.
+
+```shell
+yarn workspace exchange-api add -D @babel/core @babel/preset-env @babel/preset-typescript babel-jest jest
+```
+
+To share test environment across packages, set Babel config and Jest transform in root repository.
+
+```json
+// babel.config.json
+{
+    "presets": [
+        [
+            "@babel/preset-env",
+            {
+                "targets": {
+                    "node": "current"
+                }
+            }
+        ],
+        "@babel/preset-typescript"
+    ]
+}
+```
+
+```javascript
+// scripts/jest-transformer.js
+module.exports = require('babel-jest').default.createTransformer({
+  rootMode: 'upward',
+});
+```
+
+`scripts/jest-transformer.js` will set Babel to find configuration in root repository. Refer to [Babel Config Files](https://babel.dev/docs/en/config-files#jest).
+
+Add Jest configuration in `package.json`.
+
+```json
+// packages/exchange-api/package.json
+{
+    ...
+
+    "scripts": {
+        "build": "tsc -p ./tsconfig.build.json",
+        "test": "yarn node --experimental-vm-modules --no-warnings $(yarn bin jest)",
+        "test:coverage": "yarn run test --coverage",
+        "test:watch": "yarn run test --watchAll"
+    },
+
+    ...
+
+    "jest": {
+        "collectCoverageFrom": [
+            "src/**/*.{ts,tsx}"
+        ],
+        "displayName": "EXCHANGE-API TEST",
+        "extensionsToTreatAsEsm": [
+            ".ts"
+        ],
+        "transform": {
+            "^.+\\.[t|j]s$": "../../scripts/jest-transformer.js"
+        },
+        "moduleNameMapper": {
+            "^(\\.{1,2}/.*)\\.js$": "$1"
+        }
+    }
+}
+```
+
+TypeScript files will be transformed through `jest-transformer.js`, and treat `.ts` files to ESM by `extensionsToTreatAsEsm`. Set `test` script to config Jest to support ESM. Refet to [Jest ECMAScript Modules](https://jestjs.io/docs/ecmascript-modules) for configurations and script.
+
+### 2. Write test
+
+Next, write down tests.
+
+```typescript
+// packages/exchange-api/__tests__/RateDate.spec.ts
+import RateDate from '../src/RateDate';
+
+describe('RateDate specification test', () => {
+  it('should return string format', () => {
+    const dataString = '2022-01-01';
+    const result = new RateDate(dataString);
+
+    expect(result.toString()).toEqual(dataString);
+  });
+});
+```
+
+Test `toString` function in `RateDate` class to format correctly.
+
+```typescript
+// packages/exchange-api/__tests__/exchange.spec.ts
+import exchange from '../src/exchange';
+
+describe('Exchange function test', () => {
+  it('should exchange with default value', async () => {
+    const result = await exchange(1000);
+
+    expect(result).toHaveProperty('rate');
+    expect(result).toHaveProperty('amount');
+    expect(result.rate).not.toBeNaN();
+    expect(result.amount).not.toBeNaN();
+  });
+
+  it('should make currency lowercase', async () => {
+    const result = await exchange(1000, 'USD', 'KRW', '2022-01-01');
+
+    expect(result).toHaveProperty('rate');
+    expect(result).toHaveProperty('amount');
+    expect(result.rate).not.toBeNaN();
+    expect(result.amount).not.toBeNaN();
+  });
+
+  it('should return empty object when wrong input', async () => {
+    const result = await exchange(1000, 'test');
+
+    expect(result).toHaveProperty('rate');
+    expect(result).toHaveProperty('amount');
+    expect(result.rate).toEqual(0);
+    expect(result.amount).toEqual(0);
+  });
+});
+```
+
+Test `exchange` function to works well with default values and input values, and return object with `0` for wrong input.
+
+### 3. Run test
+
+Test the package.
+
+```shell
+yarn workspace exchange-api test
+```
+
+It will pass the test.
+
+```shell
+ PASS   EXCHANGE-API TEST  __tests__/RateDate.spec.ts
+ PASS   EXCHANGE-API TEST  __tests__/exchange.spec.ts
+
+Test Suites: 2 passed, 2 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        3.687 s
+Ran all test suites.
+```
+
+## Summary
+
+I was one who only use packages, so it is very interesting time as it is my first time to build package. I should think about exports and types for package this time, and it lead me improve my understanding of Node.js packages.
+
+I create `RateDate` class for other date operation might needed, but as there is nothing without formatting, so it might be useless and can be removed.
+
+I choose Jest for test, as it seems most popular among Jest, Mocha, Jasmine, etc. To write TypeScript test, `babel-jest` as it is used in `create-react-app`, rather than `ts-jest`.
+
+Next time, let's create application which will `exchange` function.

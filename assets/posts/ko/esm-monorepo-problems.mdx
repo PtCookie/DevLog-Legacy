@@ -1,0 +1,51 @@
+---
+slug: esm-monorepo-problems
+title: ESM Monorepo의 문제점들
+date: 2022-05-22
+author: ptcookie
+tags:
+  - node_js
+  - typescript
+description:
+---
+
+## Problems of ESM
+
+프로젝트를 시작할 때, 두 가지 환경에 대해 잘못 이해하고 있었습니다.
+첫 번째 환경은 [Electron](https://www.electronjs.org/)이고, 다른 하나는 [React Native](https://reactnative.dev/)입니다.
+
+## Electron
+
+![Electron.js](/images/electronjs.png)
+
+Electron은 크로스 플랫폼 데스크탑 프로그램을 만들기 위한 프레임워크입니다.
+
+Node.js 백엔드(메인 프로세스)에서 Chromium 브라우저 프로세스를 실행하고, 사용자는 브라우저의 웹페이지(렌더러 프로세스)와 상호작용합니다.
+파일 엑세스나 환경변수 접근 등의 시스템 기능은 메인 프로세스에서 이루어집니다.
+Chromium이 대부분의 주요 OS에서 동작하기 때문에, Electron 프로그램 또한 대부분의 주요 OS에서 동작합니다.
+
+Electron에서 발생한 문제점은, [ESM을 지원하지 않는다](https://github.com/electron/electron/issues/21457)는 점입니다.
+Electron에서 ESM을 사용하기 위한 서드파티 라이브러리들이 존재하긴 하지만, 잘 유지관리되지 않고 있었습니다.
+
+Electron에서 ESM을 사용하려면 꽤나 시간을 들여 환경을 구축해야 할 것 같았습니다.
+
+## React Native
+
+![React Native](/images/reactnative.png)
+
+React Native는 크로스 플랫폼 모바일 앱을 만들기 위한 프레임워크입니다.
+
+React Native는 React 컴포넌트를 네이티브 플랫폼 UI로 구현합니다.
+그리고 여기서 문제가 발생합니다-**React.js**와 컴포넌트를 공유할 수 없습니다.
+
+프로젝트에 사용할 공용 UI 라이브러리를 만들던 중, 이 사실을 알게 되고 작업을 멈추게 되었습니다.
+
+`Learn once, write anyware. - React Native`
+
+그렇습니다, React Native는 어디서는 구동할 수 있겠지만, React는 그렇지 않습니다.
+
+## Summary
+
+2월부터 회사일이 바빠지게 되었습니다. 그에 따라 이 ESM 프로젝트에 투자할 시간이 매우 부족하게 되었습니다.
+
+ESM에 대해 연구할 시간이 넉넉해 지거나 더 많은 환경에서 ESM이 지원된다면 프로젝트를 재개할 수 있을지도 모르겠습니다.

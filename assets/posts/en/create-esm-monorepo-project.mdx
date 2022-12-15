@@ -1,0 +1,301 @@
+---
+slug: create-esm-monorepo-project
+title: Create ESM monorepo project
+date: 2022-01-16
+author: ptcookie
+tags:
+  - node_js
+  - typescript
+description: Make monorepo project with ESM.
+---
+
+<figure>
+  <img src="/images/create-esm-monorepo-project.jpg" alt="create-esm-monorepo-project" />
+  <figcaption>Photo by&nbsp;<a href="https://unsplash.com/@fempreneurstyledstock?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Leone Venter</a>&nbsp;on&nbsp;<a href="https://unsplash.com/s/photos/package?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></figcaption>
+</figure>
+
+`Learn once, write anyware. - React Native`
+
+It is welcome comment from [React Native](https://reactnative.dev/).
+Nowaday, it is easy to do so thanks to advances of web technology. So I try to do it myself.
+
+### ESM
+
+There are many way to import and export other file in JavaScript, such as CommonJS, AMD, ESM, etc.
+I'm going to set up my project with ESM.
+
+ESM(**E**CMA**S**cript **M**odule) is module feature for ECMA script from ES6(ES2015). Import and export would looks like-
+
+```javascript
+// greeter.js
+function greeter() {
+  console.log('Hello ESM');
+}
+
+export default greeter;
+```
+
+```javascript
+// index.js
+import greeter from './greeter.js'
+
+greeter();
+```
+
+ESM is supported by most web browsers, except [IE and some mobile browser](https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Modules).
+In [Node.js](https://nodejs.org/api/esm.html#modules-ecmascript-modules), it becames stabilized from v12.22.0.
+
+It is possible for ESM to import CommonJS module, CommonJS module cannot import ESM.
+
+I think there are more and more npm packages which is pure ESM([node-fetch](https://github.com/node-fetch/node-fetch), [chalk](https://github.com/chalk/chalk), etc.), so I decide to develop ESM package.
+
+### Monorepo
+
+A monorepo(***mono*** + \_\_\_repo\_\_\_sitory) is a repository that contains multiple packages, such as [Babel](https://github.com/babel/babel) or [Webpack CLI](https://webpack.js.org/api/cli/).
+
+There are many tools for manage monorepo, like [Lerna](https://lerna.js.org/).
+Package managers like [Yarn](https://yarnpkg.com/features/workspaces) and [pnpm](https://pnpm.io/workspaces) support monorepo through workspace feature. Also, [npm](https://docs.npmjs.com/cli/v7/using-npm/workspaces) supports workspace feature from v7.
+
+This time I'll use [Yarn v2](https://yarnpkg.com/).
+
+## Initialize project
+
+First, create Yarn v2 project.
+
+```shell
+yarn init -2
+```
+
+Add yarn plugins.
+
+```shell
+# "yarn upgrade-interactive" for interactive package upgrade.
+yarn plugin import interactive-tools
+
+# Automatically adds @types/* package if added package doesn't include its own types.
+yarn plugin import typescript
+
+# Add some command for manage workspace, like "yarn workspaces foreach".
+yarn plugin import workspace-tools
+```
+
+Edit `.yarnrc.yml` to turn off Plug'n'Play. I prepare to use old `node_modules` as there are some packages still have problem with P'n'P, and other packages use yarn v2 also use `node_modules`.
+
+```yaml
+# .yarnrc.yml
+nodeLinker: node-modules
+
+plugins:
+  - path: .yarn/plugins/@yarnpkg/plugin-interactive-tools.cjs
+    spec: '@yarnpkg/plugin-interactive-tools'
+  - path: .yarn/plugins/@yarnpkg/plugin-typescript.cjs
+    spec: '@yarnpkg/plugin-typescript'
+  - path: .yarn/plugins/@yarnpkg/plugin-workspace-tools.cjs
+    spec: '@yarnpkg/plugin-workspace-tools'
+
+yarnPath: .yarn/releases/yarn-3.1.1.cjs
+```
+
+Edit `.gitignore` according to turning off Plug'n'Play.
+
+```plaintext
+# Yarn v2
+/.yarn/*
+!/.yarn/patches
+!/.yarn/plugins
+!/.yarn/releases
+!/.yarn/sdks
+/.pnp.*
+
+# Dependency directories
+node_modules/
+
+...
+```
+
+Add `.gitattributes` to exclude yarn v2 binary from `git diff`.
+
+```plaintext
+/.yarn/releases/** binary
+/.yarn/plugins/** binary
+```
+
+Add common dependencies for packages in monorepo.
+
+```shell
+# ESLint and Prettier
+yarn add -D eslint eslint-config-prettier prettier
+
+# TypeScript and ESLint plugins
+yarn add -D typesciprt @typescript-eslint/eslint-plugin @typescript-eslint/parser
+
+# Git hook for lint
+yarn add -D husky
+yarn dlx mrm lint-staged
+```
+
+Finally create and edit `.editorconfig`, `README.md`, etc.
+
+## Configure project
+
+Add configuration to `package.json`.
+
+Set `engine` to use ESM.
+
+```json
+// package.json
+{
+    ...
+
+    "engines": {
+        "node": "^14.13.1 || >=16.0.0"
+    },
+
+    ...
+}
+```
+
+Since it is root repository of monorepo, I don't add `"type": "module"`.
+
+Use `packages` folder for shared libraries for monorepo, and `apps` folder for applications of monorepo.
+
+```json
+// package.json
+{
+    ...
+
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ],
+
+    ...
+}
+```
+
+Add project to parser config of ESLint.
+
+```json
+// package.json
+{
+    ...
+
+    "eslintConfig": {
+        ...
+
+        "parserOptions": {
+            "project": [
+                "./apps/**/tsconfig.json",
+                "./packages/**/tsconfig.json"
+            ]
+        },
+
+        ...
+    },
+
+    ...
+}
+```
+
+Finally `package.json` looks like-
+
+```json
+// package.json
+{
+    ...
+
+    "engines": {
+        "node": "^14.13.1 || >=16.0.0"
+    },
+    "packageManager": "yarn@3.1.1",
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ],
+    "scripts": {
+        "prepare": "husky install",
+        "build": "yarn workspaces foreach run build",
+        "test": "yarn workspaces foreach run test",
+        "test:coverage": "yarn workspaces foreach run test:coverage"
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^5.9.1",
+        "@typescript-eslint/parser": "^5.9.1",
+        "eslint": "^8.6.0",
+        "eslint-config-prettier": "^8.3.0",
+        "husky": "^7.0.4",
+        "prettier": "^2.5.1",
+        "typescript": "^4.5.4"
+    },
+    "eslintConfig": {
+        "root": true,
+        "extends": [
+            "eslint:recommended",
+            "plugin:@typescript-eslint/recommended",
+            "prettier"
+        ],
+        "parser": "@typescript-eslint/parser",
+        "parserOptions": {
+            "project": [
+                "./apps/**/tsconfig.json",
+                "./packages/**/tsconfig.json"
+            ]
+        },
+        "plugins": [
+            "@typescript-eslint"
+        ]
+    },
+    "prettier": {
+        "printWidth": 120,
+        "singleQuote": true,
+        "trailingComma": "all"
+    },
+    "lint-staged": {
+        "*.{ts,tsx}": "eslint --cache --fix",
+        "*.{ts,tsx,yml,md}": "prettier --write"
+    }
+}
+```
+
+Add `tsconfig.json` since I'll use TypeScript.
+
+```json
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "lib": [
+            "ESNext"
+        ],
+        "module": "ESNext",
+        "moduleResolution": "Node",
+        "resolveJsonModule": false,
+        "allowJs": true,
+        "noEmit": true,
+        "importHelpers": true,
+        "isolatedModules": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "noFallthroughCasesInSwitch": true,
+        "skipLibCheck": true
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
+```
+
+* In case of `"module"`, I should be `ES2020` or `ESNext`.
+  If it is set to `ES2015` or `ES6`, [dynamic](https://www.typescriptlang.org/tsconfig#module) `import` and `import.meta` won't be supported.
+
+* `"resolveJsonModule"` is not supported by ESM yet.
+
+
+Now I finished configuration of monorepo's root repository.
+
+## Summary
+
+It took quite long to configure project. Next time I'll find some interesting subject and start to develop module.
+
+***ESM confiugration reference -*** [***Pure ESM package | GitHub Gist***](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)

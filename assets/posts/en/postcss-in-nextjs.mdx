@@ -1,0 +1,188 @@
+---
+slug: postcss-in-nextjs
+title: PostCSS in Next.js
+date: 2021-08-27
+author: ptcookie
+tags:
+  - next_js
+  - css
+description: Apply PostCSS in Next.js and styled-jsx.
+---
+
+![PostCSS](/images/postcss-in-nextjs.png)
+
+## PostCSS, A tool for transforming CSS with JavaScript
+
+[PostCSS](https://postcss.org/) is CSS preprocessor.
+It handles styles with javascript plugins.
+
+I know there have been CSS preprocessors' exist, such as [Sass](https://sass-lang.com/), [Less](https://lesscss.org/),
+but as they have their own syntax, I prefer not use them.
+
+And there comes PostCSS.
+
+As its name indicates, PostCSS support future CSS, which may be adopted in the future.
+As it has not very different syntax to standard CSS, I'll take a look at it.
+
+## PostCSS Plugin
+
+While studying PostCSS, first thing I learned is that PostCSS has no feature,
+but plugins have features to be added.
+
+Future CSS is the feature of [PostCSS Preset Env](https://preset-env.cssdb.org/),
+prepending vendor prefixes such as -webkit, -moz is the feature of [Autoprefixer](https://github.com/postcss/autoprefixer).
+
+There are other plugins, [PostCSS Nested](https://github.com/postcss/postcss-nested) support nesting like Sass,
+linting support from [stylelint](https://stylelint.io/), make it able to use other preprocessors like Sass or Less.
+
+## PostCSS in NextJS
+
+Next.js has built-in PostCSS support.
+Default behavior of PostCSS in Next.js looks like this.
+
+```javascript
+// postcss.config.js
+
+module.exports = {
+  plugins: {
+    'postcss-flexbugs-fixes': {},
+    'postcss-preset-env': {
+      autoprefixer: {
+        flexbox: 'no-2009',
+      },
+      stage: 3,
+      features: {
+        'custom-properties': false,
+      },
+    },
+  },
+};
+```
+
+Active plugins
+
+- [PostCSS Flexbugs Fixes](https://github.com/luisrudge/postcss-flexbugs-fixes)
+  Fix bugs related to flex property.
+- [PostCSS Preset Env](https://preset-env.cssdb.org/)
+  Enable to use future CSS.
+
+Applied properties of PostCSS Preset Env
+
+- **autoprefixer** flexbox no-2009 : Prepend vendor prefix for flexbox(> IE 10).
+
+- **stage** 3 : Support polyfill for Stage 3(Candidate) syntax.
+
+- **custom properties** false : Disable custom properties.
+
+```css
+img {
+  --some-length: 32px;
+
+  height: var(--some-length);
+  width: var(--some-length);
+}
+```
+
+Disable feature likes --some-length above.
+
+## Customize PostCSS in NextJS
+
+Default behavior may be enough, but let's add some features.
+According to Next.js docs, if PostCSS config file exists, default behavior of Next.js is ignored.
+So let's copy default configuration, and add those npm packages.
+
+```shell
+npm install postcss postcss-flexbugs-fixes postcss-preset-env
+```
+
+Add more PostCSS plugins, such as apply PostCSS in styled-jsx.
+
+```shell
+npm install postcss-import styled-jsx-plugin-postcss
+```
+
+- [postcss-import](https://github.com/postcss/postcss-import)
+  Merge `@import`ed style files into one file.
+- [styled-jsx-plugin-postcss](https://github.com/giuseppeg/styled-jsx-plugin-postcss)
+  Enable PostCSS in styled-jsx.
+
+After installation finished, let's make config file.
+
+```javascript
+// postcss.config.js
+
+module.exports = {
+  plugins: {
+    'postcss-import': {},
+    'postcss-flexbugs-fixes': {},
+    'postcss-preset-env': {
+      autoprefixer: {
+        flexbox: 'no-2009',
+      },
+      stage: 3,
+      features: {
+        'custom-properties': false,
+        'nesting-rules': true,
+      },
+    },
+  },
+};
+```
+
+During configuration I found PostCSS' weird behavior, it loads plugins in order as is written in configuration file.
+So plugin sorting is very important, and should check the plugin's document.
+
+As document of postcss-import says it should be used as first plugin so that other plugins can process single file,
+so put postcss-import first and Next.js default config next. And enable CSS nesting, most interesting part of Sass.
+
+Applying plugin to styled-jsx needs babel config. Let's make one following document.
+
+```javascript
+// babel.config.js
+
+module.exports = {
+  presets: [
+    [
+      'next/babel',
+      {
+        'styled-jsx': {
+          plugins: ['styled-jsx-plugin-postcss'],
+        },
+      },
+    ],
+  ],
+};
+```
+
+Check whether plugins applied after configuration finished.
+
+```css
+a {
+  color: #9b9b9b;
+  text-decoration: none;
+  transition: color 0.3s ease;
+
+  &:active,
+  &:hover {
+    color: #000;
+  }
+}
+```
+
+```tsx
+<style jsx>
+  {`
+    ...
+    .active {
+      color: #222;
+      & ul {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    ...
+  `}
+</style>
+```
+
+It works with no problem.

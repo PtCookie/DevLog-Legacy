@@ -1,0 +1,51 @@
+---
+slug: esm-monorepo-problems
+title: Problems of ESM Monorepo
+date: 2022-05-22
+author: ptcookie
+tags:
+  - node_js
+  - typescript
+description: As I started project, I have misconception of two environments. One of them is Electron, and other one is React Native.
+---
+
+## Problems of ESM
+
+As I started project, I have misconception of two environments.
+One of them is [Electron](https://www.electronjs.org/), and other one is [React Native](https://reactnative.dev/).
+
+## Electron
+
+![Electron](/images/electronjs.png)
+
+Electron is cross-platform desktop application framework.
+
+Node.js backend(main) process runs Chromium, and user will interact with webpage(renderer).
+System functionalities such as file access or accessing environment variables are accomplished by main process.
+As Chromium runs well in all major OS, Electron apps also run well in all major OS.
+
+And problem with Electron is, it does [not support ESM](https://github.com/electron/electron/issues/21457).
+There are 3rd party libraries for Electron ESM, but are not maintained well.
+
+So I found it will be hard time to configure Electron to work with ESM.
+
+## React Native
+
+![React Native](/images/reactnative.png)
+
+React Native is cross-platform mobile application framework.
+
+It renders React components to native platform UI.
+And there comes problem-**Components are not shared with React.js**.
+
+As I work to build shared UI library for this project, I found this fact, and get in stuck.
+
+`Learn once, write anyware. - React Native`
+
+Yes, React Native may run in everywhere, but React not.
+
+## Summary
+
+As from February on I have very busy time at work. So I have very little time for ESM project research.
+
+I may continue this project when I have more time to research or more environments support ESM well.

@@ -1,0 +1,441 @@
+---
+slug: create-esm-shared-library
+title: ESM 공용 라이브러리 만들기
+date: 2022-02-12
+author: ptcookie
+tags:
+  - node_js
+  - typescript
+description: 지난 번에 작성했던 Monorepo에 만들 주제를 생각해보다가, API 호출 후 처리하는 기본적인 애플리케이션을 만들어보기로 하였습니다.
+---
+
+<figure>
+  <img src="/images/create-esm-shared-library.jpg" alt="create-esm-shared-library" />
+  <figcaption>Photo by&nbsp;<a href="https://unsplash.com/@alfonsmc10?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Alfons Morales</a>&nbsp;on&nbsp;<a href="https://unsplash.com/@alfonsmc10?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></figcaption>
+</figure>
+
+지난 번에 작성했던 Monorepo에 만들 주제를 생각해보다가, API 호출 후 처리하는 기본적인 애플리케이션을 만들어보기로 하였습니다. 그리하여 [Public APIs](https://github.com/public-apis/public-apis)를 찾아보다가, 환율 계산을 하는 애플리케이션을 만들어보기로 하였습니다. 여러 환율 관련 API 중, [Free Currency Rates API](https://github.com/fawazahmed0/currency-api#readme)를 사용해보기로 하였습니다.
+
+## Initialize package
+
+기존에 만들어둔 루트 저장소에서, 공용 라이브러리를 `packages` 폴더를 공용 라이브러리로 사용하기로 했으므로, 그 아래에 환율 API를 호출하는 `exchange-api` 패키지를 작성합니다.
+
+```json
+// packages/exchange-api/package.json
+{
+    "name": "exchange-api",
+
+    ...
+
+    "type": "module",
+
+    ...
+
+    "exports": "./lib/index.js",
+    "types": "lib",
+    "files": [
+        "lib"
+    ]
+}
+```
+
+ESM 패키지이므로, `"type": "module"`을 설정하고, `main` 대신 `exports`를 사용하였습니다. TypeScript 빌드 후 출력되는 파일을 `lib`에 출력하고, 다른 패키지에서 사용할 수 있도록 `types`와 `files`에 추가하였습니다.
+
+API 호출을 위한 `node-fetch`, 날짜 포맷을 위한 `date-fns`와 `typescript`를 추가합니다.
+
+```shell
+yarn workspace exchange-api add date-fns node-fetch
+yarn workspace exchange-api add -D typescript
+```
+
+`tsconfig.json`도 작성합니다.
+
+```json
+// packages/exchange-api/tsconfig.json
+{
+    "extends": "../../tsconfig.json",
+    "include": [
+        "**/*.js",
+        "**/*.ts"
+    ]
+}
+```
+
+루트 저장소의 `tsconfig.json` 파일을 참조하도록 설정했습니다. 그리고 TypeScript 빌드 시 사용할 설정 파일을 작성합니다.
+
+```json
+// packages/exchange-api/tsconfig.build.json
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "noEmit": false,
+        "outDir": "./lib",
+        "newLine": "lf",
+        "declaration": true
+    },
+    "include": [
+        "src"
+    ]
+}
+```
+
+`src`의 파일을 입력으로, `lib`에 출력하도록 설정했습니다. 타입 정의 파일 또한 출력되도록 하였습니다.
+
+이 후 `build` 스크립트를 작성합니다.
+
+```json
+// packages/exchange-api/package.json
+{
+    ...
+
+    "scripts": {
+        "build": "tsc -p ./tsconfig.build.json"
+    },
+
+    ...
+}
+```
+
+이제 패키지를 작성해보겠습니다.
+
+## Build package
+
+### 1. RateDate.ts
+
+우선 날짜를 다루기 위한 클래스를 작성합니다.
+
+```typescript
+// packages/exchange-api/src/RateDate.ts
+import { format } from 'date-fns';
+
+class RateDate {
+  readonly #date: Date;
+
+  constructor(value: number | string | Date) {
+    this.#date = new Date(value);
+  }
+
+  toString(): string {
+    return format(this.#date, 'yyyy-MM-dd');
+  }
+}
+
+export default RateDate;
+```
+
+입력을 통해 네이티브 `Date` 객체를 생성하고, `date-fns`를 통해 문자열로 포맷합니다.
+네이티브 객체의 경우 ES2019 문법의 private field를 사용하였고, 변경할 필요가 없기 때문에 TypeScript의 `readonly` 속성을 사용하였습니다.
+
+이제 API를 호출할 함수를 작성하겠습니다.
+
+### 2. exchange.ts
+
+방금 만든 `RateDate` 클래스와 `node-fetch`를 가져옵니다.
+
+```typescript
+// packages/exchange-api/src/exchange.ts
+import fetch from 'node-fetch';
+
+import RateDate from './RateDate.js';
+```
+
+API 문서를 참조하여 API 호출을 위한 타입과 상수를 설정합니다.
+
+```typescript
+// packages/exchange-api/src/exchange.ts
+...
+
+type ApiVersion = number;
+type Currency = string;
+type Extension = 'min.json' | 'json';
+
+const apiEndpoint = 'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api';
+const apiVersion: ApiVersion = 1;
+const extension: Extension = 'json';
+```
+
+이제 API를 호출하여 환율을 계산한 후, 환율과 환전된 금액을 반환하는 함수를 만듭니다.
+
+```typescript
+// packages/exchange-api/src/exchange.ts
+...
+
+async function exchange(
+  amount: number,
+  from: Currency = 'krw',
+  to: Currency = 'usd',
+  date: number | string | Date = 'latest',
+): Promise<{
+  rate: number;
+  amount: number;
+} | void> {
+  const dateStr = date !== 'latest' ? new RateDate(date).toString() : date;
+  const fromLowerCase = from.toLowerCase();
+  const toLowerCase = to.toLowerCase();
+  const apiURLString = `${apiEndpoint}@${apiVersion}/${dateStr}/currencies/${fromLowerCase}/${toLowerCase}.${extension}`;
+  const apiURL = new URL(apiURLString);
+
+  try {
+    const apiResponse = await fetch(apiURL.toString());
+
+    if (apiResponse.status !== 200) {
+      return {
+        rate: 0,
+        amount: 0,
+      };
+    } else {
+      const convertedResponse = (await apiResponse.json()) as { [key: string]: string | number };
+      const exchangeRate = convertedResponse[toLowerCase] as number;
+
+      return {
+        rate: exchangeRate,
+        amount: Number(amount) * exchangeRate,
+      };
+    }
+  } catch (error: unknown) {
+    console.log("Can't fetch API return.");
+    console.log((error as Error).toString());
+  }
+}
+
+export default exchange;
+```
+
+환전 화폐의 경우 기본값은 `krw`에서 `usd`로 설정하였습니다.
+
+날짜 입력의 경우, 기본값은 `latest`이며, 그 외의 값은 `RateDate` 클래스의 `toString`을 통해 지정된 형식으로 변환합니다. 그 후 각 상수들을 조합하여 API 엔드 포인트 URI를 만들고, API를 호출합니다.
+
+API 호출은 `try/catch` 내부의 `async/await`를 사용하였습니다.
+
+API 호출을 실패하였을 경우에는 함수의 반환값은 `void`로, 에러 로그를 출력합니다. 호출은 성공하였으나 잘못된 입력 등으로 응답 코드가 `200`이 아닌 경우, 환율과 환전 금액을 `0`으로 반환합니다.
+
+API 호출에 성공하였을 경우, 응답받은 환율과 환전 금액을 계산하여 반환합니다.
+
+```typescript
+// packages/exchange-api/src/exchange.ts
+import fetch from 'node-fetch';
+
+import RateDate from './RateDate.js';
+
+type ApiVersion = number;
+type Currency = string;
+type Extension = 'min.json' | 'json';
+
+const apiEndpoint = 'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api';
+const apiVersion: ApiVersion = 1;
+const extension: Extension = 'json';
+
+async function exchange(
+  amount: number,
+  from: Currency = 'krw',
+  to: Currency = 'usd',
+  date: number | string | Date = 'latest',
+): Promise<{
+  rate: number;
+  amount: number;
+} | void> {
+  const dateStr = date !== 'latest' ? new RateDate(date).toString() : date;
+  const fromLowerCase = from.toLowerCase();
+  const toLowerCase = to.toLowerCase();
+  const apiURLString = `${apiEndpoint}@${apiVersion}/${dateStr}/currencies/${fromLowerCase}/${toLowerCase}.${extension}`;
+  const apiURL = new URL(apiURLString);
+
+  try {
+    const apiResponse = await fetch(apiURL.toString());
+
+    if (apiResponse.status !== 200) {
+      return {
+        rate: 0,
+        amount: 0,
+      };
+    } else {
+      const convertedResponse = (await apiResponse.json()) as { [key: string]: string | number };
+      const exchangeRate = convertedResponse[toLowerCase] as number;
+
+      return {
+        rate: exchangeRate,
+        amount: Number(amount) * exchangeRate,
+      };
+    }
+  } catch (error: unknown) {
+    console.log("Can't fetch API return.");
+    console.log((error as Error).toString());
+  }
+}
+
+export default exchange;
+```
+
+완성된 `exchange` 함수입니다.
+
+### 3. index.ts
+
+`package.json`에서 설정한 `index.js`를 작성하면 패키지가 완성됩니다.
+
+```typescript
+// packages/exchange-api/src/index.ts
+import exchange from './exchange.js';
+
+export { exchange as default };
+```
+
+## Test package
+
+### 1. Configuration
+
+테스트 라이브러리로는 [Jest](https://jestjs.io/)를 사용하겠습니다. 필요한 패키지를 추가합니다.
+
+```shell
+yarn workspace exchange-api add -D @babel/core @babel/preset-env @babel/preset-typescript babel-jest jest
+```
+
+다른 패키지들에서도 테스트 환경을 공유하기 위해, 루트 저장소에 Babel 설정 및 Jest 변환을 설정해줍니다.
+
+```json
+// babel.config.json
+{
+    "presets": [
+        [
+            "@babel/preset-env",
+            {
+                "targets": {
+                    "node": "current"
+                }
+            }
+        ],
+        "@babel/preset-typescript"
+    ]
+}
+```
+
+```javascript
+// scripts/jest-transformer.js
+module.exports = require('babel-jest').default.createTransformer({
+  rootMode: 'upward',
+});
+```
+
+`scripts/jest-transformer.js`의 변환을 통해 루트 저장소의 Babel 설정을 찾도록 설정합니다. 설정은 [Babel Config Files](https://babel.dev/docs/en/config-files#jest)를 참조하였습니다.
+
+이제 Jest 설정을 `package.json`에 추가합니다.
+
+```json
+// packages/exchange-api/package.json
+{
+    ...
+
+    "scripts": {
+        "build": "tsc -p ./tsconfig.build.json",
+        "test": "yarn node --experimental-vm-modules --no-warnings $(yarn bin jest)",
+        "test:coverage": "yarn run test --coverage",
+        "test:watch": "yarn run test --watchAll"
+    },
+
+    ...
+
+    "jest": {
+        "collectCoverageFrom": [
+            "src/**/*.{ts,tsx}"
+        ],
+        "displayName": "EXCHANGE-API TEST",
+        "extensionsToTreatAsEsm": [
+            ".ts"
+        ],
+        "transform": {
+            "^.+\\.[t|j]s$": "../../scripts/jest-transformer.js"
+        },
+        "moduleNameMapper": {
+            "^(\\.{1,2}/.*)\\.js$": "$1"
+        }
+    }
+}
+```
+
+TypeScript 파일들을 방금 만들었던 `jest-transformer.js`을 통해 처리하도록 설정하고, `extensionsToTreatAsEsm`을 통해 `.ts` 파일들을 ESM으로 처리하도록 합니다. 또한 ESM을 지원하는 Jest를 실행하기 위한 `test` 스크립트를 작성합니다. 설정 및 스크립트는 [Jest ECMAScript Modules](https://jestjs.io/docs/ecmascript-modules)를 참조하였습니다.
+
+### 2. Write test
+
+이제 테스트를 작성하겠습니다.
+
+```typescript
+// packages/exchange-api/__tests__/RateDate.spec.ts
+import RateDate from '../src/RateDate';
+
+describe('RateDate specification test', () => {
+  it('should return string format', () => {
+    const dataString = '2022-01-01';
+    const result = new RateDate(dataString);
+
+    expect(result.toString()).toEqual(dataString);
+  });
+});
+```
+
+`RateDate` 클래스의 `toString`이 정상적으로 포맷하는지 테스트합니다.
+
+```typescript
+// packages/exchange-api/__tests__/exchange.spec.ts
+import exchange from '../src/exchange';
+
+describe('Exchange function test', () => {
+  it('should exchange with default value', async () => {
+    const result = await exchange(1000);
+
+    expect(result).toHaveProperty('rate');
+    expect(result).toHaveProperty('amount');
+    expect(result.rate).not.toBeNaN();
+    expect(result.amount).not.toBeNaN();
+  });
+
+  it('should make currency lowercase', async () => {
+    const result = await exchange(1000, 'USD', 'KRW', '2022-01-01');
+
+    expect(result).toHaveProperty('rate');
+    expect(result).toHaveProperty('amount');
+    expect(result.rate).not.toBeNaN();
+    expect(result.amount).not.toBeNaN();
+  });
+
+  it('should return empty object when wrong input', async () => {
+    const result = await exchange(1000, 'test');
+
+    expect(result).toHaveProperty('rate');
+    expect(result).toHaveProperty('amount');
+    expect(result.rate).toEqual(0);
+    expect(result.amount).toEqual(0);
+  });
+});
+```
+
+`exchange` 함수가 기본값 및 입력값을 토대로 정상적으로 반환하는지, 잘못된 입력에 대해 `0`으로 이루어진 객체를 반환하는지 테스트합니다.
+
+### 3. Run test
+
+이제 테스트를 실행합니다.
+
+```shell
+yarn workspace exchange-api test
+```
+
+정상적으로 통과하는 것을 확인할 수 있습니다.
+
+```shell
+ PASS   EXCHANGE-API TEST  __tests__/RateDate.spec.ts
+ PASS   EXCHANGE-API TEST  __tests__/exchange.spec.ts
+
+Test Suites: 2 passed, 2 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        3.687 s
+Ran all test suites.
+```
+
+## Summary
+
+지금까지는 패키지를 받기만 하는 입장이었고, 만들어본 적은 없다 보니 새롭고 신선한 느낌이었습니다. 내보내기 설정이나 타입 지원 등 이전까지는 생각해보지 않는 요소를 고민하고, Node.js 패키지에 대한 이해가 조금 깊어진 것 같습니다.
+
+`RateDate` 클래스는 날짜 변환 외에 다른 기능이 필요하지 않을까하고 만들었습니다만, 날짜 변환 외에 구현해야겠다 싶은 기능이 없어서 제거해도 되지 않나 싶습니다.
+
+테스트 라이브러리의 경우 Jest, Mocha, Jasmine 등 다양한 라이브러리 중에 고민했는데, 제일 많이 쓰이는 Jest를 사용하기로 했습니다. TypeScript 지원의 경우, `ts-jest`와 `babel-jest` 중에 고민했는데, `create-react-app`에서 사용하는 `babel-jest`를 사용하기로 했습니다.
+
+다음에는 이번에 만든 `exchange` 함수를 사용할 애플리케이션을 만들어보겠습니다.

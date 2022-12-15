@@ -1,0 +1,299 @@
+---
+slug: create-esm-monorepo-project
+title: ESM Monorepo 프로젝트 만들기
+date: 2022-01-16
+author: ptcookie
+tags:
+  - node_js
+  - typescript
+description: ESM으로 Monorepo 프로젝트 만들기.
+---
+
+<figure>
+  <img src="/images/create-esm-monorepo-project.jpg" alt="create-esm-monorepo-project" />
+  <figcaption>Photo by&nbsp;<a href="https://unsplash.com/@fempreneurstyledstock?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Leone Venter</a>&nbsp;on&nbsp;<a href="https://unsplash.com/s/photos/package?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></figcaption>
+</figure>
+
+`Learn once, write anyware. - React Native`
+
+[React Native](https://reactnative.dev/) 홈페이지 접속하면 맞아주는 문구입니다.
+요즘에는 웹 기술의 발전으로 쉽게 가능하게 되었습니다. 그리하여 한 번 직접 해보자는 생각에 시작하게 되었습니다.
+
+### ESM
+
+JavaScript에서 다른 파일을 가져오거나, 내보내는 방식은 여러가지가 있습니다.
+CommonJS, AMD, ESM 등이 있는데 그 중에 ESM을 사용하여 프로젝트를 구성해보려고 합니다.
+
+ESM(**E**CMA**S**cript **M**odule)은 ES6(ES2015)에서 추가된 모듈 기능입니다. 다음과 같은 방식으로 가져오거나 내보냅니다.
+
+```javascript
+// greeter.js
+function greeter() {
+  console.log('Hello ESM');
+}
+
+export default greeter;
+```
+
+```javascript
+// index.js
+import greeter from './greeter.js'
+
+greeter();
+```
+
+브라우저 지원 상황은 [IE 및 일부 모바일 브라우저](https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Modules)를 제외하고 지원합니다.
+[Node.js](https://nodejs.org/api/esm.html#modules-ecmascript-modules)에서는 v12.22.0부터 안정 지원하게 되었습니다.
+
+ESM에서 CommonJS 모듈을 가져오는 것은 가능하지만, CommonJS 모듈에서 ESM을 가져오는 것은 불가능합니다.
+
+npm 패키지 중에 순수 ESM 패키지들이 늘어나는 것 같아([node-fetch](https://github.com/node-fetch/node-fetch), [chalk](https://github.com/chalk/chalk) 등) ESM 패키지를 작성해보기로 하였습니다.
+
+### Monorepo
+
+Monorepo는 여러 패키지를 포함한 저장소를 의미합니다. [Babel](https://github.com/babel/babel)이나 [Webpack CLI](https://webpack.js.org/api/cli/) 등이 이에 해당합니다.
+
+Monorepo를 관리하기 위한 도구로 [Lerna](https://lerna.js.org/) 등이 있습니다.
+패키지 관리자의 경우, [Yarn](https://yarnpkg.com/features/workspaces)이나 [pnpm](https://pnpm.io/workspaces)에서 workspace 기능을 통해 지원합니다. [npm](https://docs.npmjs.com/cli/v7/using-npm/workspaces) 또한 v7부터 지원하는 것으로 알고 있습니다.
+
+이번에는 [Yarn v2](https://yarnpkg.com/)를 사용하여 진행해보려고 합니다.
+
+## Initialize project
+
+우선 Yarn v2 프로젝트를 생성합니다.
+
+```shell
+yarn init -2
+```
+
+Yarn plugin을 추가합니다.
+
+```shell
+# yarn upgrade-interactive를 통해 상호작용 가능한 패키지 업그레이드가 가능합니다.
+yarn plugin import interactive-tools
+
+# 타입 정의가 없는 패키지 설치 시 가능하면 @types/* 패키지를 함께 설치합니다.
+yarn plugin import typescript
+
+# yarn workspaces foreach 등 workspace 관련 커맨드를 추가합니다.
+yarn plugin import workspace-tools
+```
+
+`.yarnrc.yml` 파일을 수정하여 Plug'n'Play 기능을 끕니다. 아직까지는 문제가 발생하는 패키지도 많은 편이고, Yarn v2를 사용하는 라이브러리도 기존의 `node_modules`를 사용하는 경우가 많은 것으로 보여 저는 사용하지 않는 편입니다.
+
+```yaml
+# .yarnrc.yml
+nodeLinker: node-modules
+
+plugins:
+  - path: .yarn/plugins/@yarnpkg/plugin-interactive-tools.cjs
+    spec: '@yarnpkg/plugin-interactive-tools'
+  - path: .yarn/plugins/@yarnpkg/plugin-typescript.cjs
+    spec: '@yarnpkg/plugin-typescript'
+  - path: .yarn/plugins/@yarnpkg/plugin-workspace-tools.cjs
+    spec: '@yarnpkg/plugin-workspace-tools'
+
+yarnPath: .yarn/releases/yarn-3.1.1.cjs
+```
+
+`.gitignore`을 Plug'n'Play 해제에 맞추어 수정합니다.
+
+```gitignore
+# Yarn v2
+/.yarn/*
+!/.yarn/patches
+!/.yarn/plugins
+!/.yarn/releases
+!/.yarn/sdks
+/.pnp.*
+
+# Dependency directories
+node_modules/
+
+...
+```
+
+`.gitattributes`를 추가해 Yarn v2 바이너리를 `git diff`에서 제외합니다.
+
+```git
+/.yarn/releases/** binary
+/.yarn/plugins/** binary
+```
+
+패키지들에서 공통적으로 사용할 패키지를 설치합니다.
+
+```shell
+# ESLint and Prettier
+yarn add -D eslint eslint-config-prettier prettier
+
+# TypeScript and ESLint plugins
+yarn add -D typesciprt @typescript-eslint/eslint-plugin @typescript-eslint/parser
+
+# Git hook for lint
+yarn add -D husky
+yarn dlx mrm lint-staged
+```
+
+그 외 `.editorconfig`나 `README.md` 등의 파일을 생성 및 작성합니다.
+
+## Configure project
+
+`package.json`에 설정을 추가합니다.
+
+ESM을 사용하기 위해 `engine`을 설정합니다.
+
+```json
+// package.json
+{
+    ...
+
+    "engines": {
+        "node": "^14.13.1 || >=16.0.0"
+    },
+
+    ...
+}
+```
+
+Monorepo의 루트 저장소이므로 `"type": "module"`은 추가하지 않았습니다.
+
+공통적으로 사용할 라이브러리로 `packages` 폴더를 사용하고, 애플리케이션을 위해 `apps` 폴더를 사용하겠습니다.
+
+```json
+// package.json
+{
+    ...
+
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ],
+
+    ...
+}
+```
+
+ESLint의 파서 설정에도 프로젝트를 추가합니다.
+
+```json
+// package.json
+{
+    ...
+
+    "eslintConfig": {
+        ...
+
+        "parserOptions": {
+            "project": [
+                "./apps/**/tsconfig.json",
+                "./packages/**/tsconfig.json"
+            ]
+        },
+
+        ...
+    },
+
+    ...
+}
+```
+
+완성된 `package.json` 파일입니다.
+
+```json
+// package.json
+{
+    ...
+
+    "engines": {
+        "node": "^14.13.1 || >=16.0.0"
+    },
+    "packageManager": "yarn@3.1.1",
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ],
+    "scripts": {
+        "prepare": "husky install",
+        "build": "yarn workspaces foreach run build",
+        "test": "yarn workspaces foreach run test",
+        "test:coverage": "yarn workspaces foreach run test:coverage"
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^5.9.1",
+        "@typescript-eslint/parser": "^5.9.1",
+        "eslint": "^8.6.0",
+        "eslint-config-prettier": "^8.3.0",
+        "husky": "^7.0.4",
+        "prettier": "^2.5.1",
+        "typescript": "^4.5.4"
+    },
+    "eslintConfig": {
+        "root": true,
+        "extends": [
+            "eslint:recommended",
+            "plugin:@typescript-eslint/recommended",
+            "prettier"
+        ],
+        "parser": "@typescript-eslint/parser",
+        "parserOptions": {
+            "project": [
+                "./apps/**/tsconfig.json",
+                "./packages/**/tsconfig.json"
+            ]
+        },
+        "plugins": [
+            "@typescript-eslint"
+        ]
+    },
+    "prettier": {
+        "printWidth": 120,
+        "singleQuote": true,
+        "trailingComma": "all"
+    },
+    "lint-staged": {
+        "*.{ts,tsx}": "eslint --cache --fix",
+        "*.{ts,tsx,yml,md}": "prettier --write"
+    }
+}
+```
+
+TypeScript를 사용하므로 `tsconfig.json` 파일도 설정합니다.
+
+```json
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "lib": [
+            "ESNext"
+        ],
+        "module": "ESNext",
+        "moduleResolution": "Node",
+        "resolveJsonModule": false,
+        "allowJs": true,
+        "noEmit": true,
+        "importHelpers": true,
+        "isolatedModules": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "noFallthroughCasesInSwitch": true,
+        "skipLibCheck": true
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
+```
+
+- `"module"`의 경우, `ES2020` 혹은 `ESNext`로 설정하면 됩니다.
+`ES2015`나 `ES6`의 경우 [dynamic `import`와 `import.meta`](https://www.typescriptlang.org/tsconfig#module)를 지원하지 않는다고 합니다.
+- `"resolveJsonModule"`의 경우 ESM에서 아직까지는 지원되지 않는다고 합니다.
+
+이상으로 Monorepo의 루트 저장소 설정은 마무리했습니다.
+
+## Summary
+
+프로젝트 설정에 꽤 시간이 걸렸습니다. 다음에는 적당한 주제를 찾아서 ESM을 만들어 보겠습니다.
+
+___ESM 설정 참조 - [Pure ESM package | GitHub Gist](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)___
