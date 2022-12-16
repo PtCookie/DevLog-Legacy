@@ -17,9 +17,34 @@ export default function Home() {
       <div className={styles.container}>
         <div>
           <h1>
-            {locale === 'ko' ? '안녕하세요,' : 'Hello, This is'}
-            &nbsp;PtCookie<span className={styles.fancy}>.</span>DevLog
-            {locale === 'ko' ? ' 입니다' : ''}
+            {locale === 'ko' ? (
+              <>
+                안녕하세요,&nbsp;
+                <br />
+              </>
+            ) : (
+              <>
+                Hello,&nbsp;
+                <br />
+              </>
+            )}
+            {locale === 'ko' ? (
+              <></>
+            ) : (
+              <>
+                This is&nbsp;
+                <br />
+              </>
+            )}
+            PtCookie<span className={styles.fancy}>.</span>DevLog
+            {locale === 'ko' ? (
+              <>
+                <br />
+                입니다
+              </>
+            ) : (
+              <></>
+            )}
           </h1>
           <span className={styles.handle}>@PtCookie</span>
           <h2>A DevLog of PtCookie</h2>
