@@ -81,10 +81,6 @@
     & a {
         color: var(--button-text);
         text-decoration: underline;
-
-        @media (prefers-color-scheme: dark) {
-            color: var(--point);
-        }
     }
 
     & h1 {
