@@ -9,6 +9,7 @@
         "url": "https://blog.ptcookie.dev"
     },
     "scripts": {
+        "prepare": "husky install",
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
@@ -44,18 +45,19 @@
         "@types/chai": "^4.3.4",
         "@types/mocha": "^10.0.1",
         "chai": "^4.3.7",
-        "eslint": "8.29.0",
-        "eslint-config-next": "13.0.7",
-        "eslint-config-prettier": "8.5.0",
+        "eslint": "^8.30.0",
+        "eslint-config-next": "^13.0.7",
+        "eslint-config-prettier": "^8.5.0",
+        "husky": "^8.0.2",
         "mocha": "^10.2.0",
         "prettier": "2.8.0",
-        "stylelint": "14.16.0",
-        "stylelint-config-prettier": "9.0.4",
-        "stylelint-config-standard": "29.0.0",
+        "stylelint": "^14.16.0",
+        "stylelint-config-prettier": "^9.0.4",
+        "stylelint-config-standard": "^29.0.0",
         "ts-node": "^10.9.1"
     },
     "engines": {
-        "node": "<=16.8.0"
+        "node": ">=16.8.0 <17"
     },
     "private": true
 }

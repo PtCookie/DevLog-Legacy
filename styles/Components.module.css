@@ -8,19 +8,11 @@
         display: inline-block;
         color: var(--light-gray);
         font-size: 1.25rem;
-
-        @media (prefers-color-scheme: dark) {
-            color: var(--gray);
-        }
     }
 
     & a[data-active='true'] {
         color: var(--gray);
         font-weight: bold;
-
-        @media (prefers-color-scheme: dark) {
-            color: var(--light-gray);
-        }
     }
 }
 
@@ -84,8 +76,8 @@
         position: absolute;
         top: calc(50% - 2px / 2);
         left: calc(50% - 28px / 2);
-        background: var(--light);
-        transition: all 150ms ease-in;
+        background: var(--nav-item-disabled);
+        transition: all 150ms ease-in, color 0.5s ease, background-color 0.5s ease;
     }
 
     & div:nth-child(1) {
@@ -102,11 +94,7 @@
 
     &[data-active='true'] {
         & div {
-            background: var(--gray);
-
-            @media (prefers-color-scheme: dark) {
-                background: var(--light);
-            }
+            background: var(--nav-item-enabled);
         }
 
         & div:nth-child(1) {
@@ -127,17 +115,13 @@
     padding: 0.25em 0.5em;
     display: inline-block;
     border-radius: 3px;
-    background-color: var(--button);
+    background: var(--button-bg);
     color: var(--button-text);
-    transition: background-color 0.3s ease;
+    transition: background 0.3s ease, color 0.5s ease, background-color 0.5s ease;
 
     &:active,
     &:hover {
-        background-color: var(--button-active);
-    }
-
-    @media (prefers-color-scheme: dark) {
-        color: var(--point);
+        background: var(--button-active);
     }
 }
 
@@ -157,6 +141,29 @@
         &:not(:last-child) {
             margin-right: 2em;
         }
+    }
+}
+
+.theme {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top: 1.25rem;
+    right: 1rem;
+    color: var(--nav-item-disabled);
+    z-index: 2;
+
+    @media (min-width: 769px) {
+        top: auto;
+        bottom: 12rem;
+        right: auto;
+        left: 5.5rem;
+        display: flex;
+        color: var(--nav-item-enabled);
+    }
+
+    &[data-active='true'] {
+        color: var(--nav-item-enabled);
     }
 }
 

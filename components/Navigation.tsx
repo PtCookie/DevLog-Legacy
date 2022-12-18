@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { FcHome, FcReading } from 'react-icons/fc';
 import BurgerButton from './BurgerButton';
 import LocaleSelector from './LocaleSelector';
+import ThemeSwitch from './ThemeSwitch';
 import styles from '../styles/Navigation.module.css';
 
 export default function Navigation() {
@@ -32,6 +33,7 @@ export default function Navigation() {
           </li>
         </ul>
       </div>
+      <ThemeSwitch active={active} />
       <LocaleSelector active={active} />
     </nav>
   );
