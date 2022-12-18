@@ -1,15 +1,18 @@
 :root {
-    --white: #fff;
-    --light: #dedede;
+    --light: #fff;
     --light-gray: #9b9b9b;
-    --gray: #222;
-    --dark: #0e0e0e;
-    --black: #000;
-    --nav-bar: #182d27;
-    --button: rgb(21 132 125 / 20%);
+    --gray: #646464;
+    --dark: #000;
+    --button-bg: rgb(21 132 125 / 20%);
     --button-active: rgb(21 132 125 / 40%);
-    --button-text: #15847d;
-    --point: #5ce626;
+    --button-text: rgb(21 132 125);
+    --nav-bar: rgb(24 45 39);
+    --nav-title: rgb(221 221 221);
+    --nav-item-disabled: var(--nav-title);
+    --nav-item-enabled: var(--dark);
+    --point: rgb(92 230 38);
+
+    color-scheme: light dark;
 }
 
 * {
@@ -22,9 +25,20 @@ body {
     margin: 0;
 }
 
+html[data-theme='dark'] {
+    --light: #222;
+    --light-gray: #646464;
+    --gray: #9b9b9b;
+    --dark: #ddd;
+    --button-bg: rgb(158 196 0 / 20%);
+    --button-active: rgb(158 196 0 / 40%);
+    --button-text: rgb(92 230 38);
+}
+
 body {
-    background-color: var(--white);
-    color: var(--black);
+    background-color: var(--light);
+    color: var(--dark);
+    transition: color 0.5s ease, background-color 0.5s ease;
 }
 
 a {
@@ -34,15 +48,4 @@ a {
 
 pre code {
     border-radius: 0.75rem;
-}
-
-@media (prefers-color-scheme: dark) {
-    html {
-        color-scheme: dark;
-    }
-
-    body {
-        background: var(--dark);
-        color: var(--light);
-    }
 }
