@@ -1,15 +1,18 @@
 :root {
-    --white: #fff;
-    --light: #dedede;
+    --light: #fff;
     --light-gray: #9b9b9b;
-    --gray: #222;
-    --dark: #0e0e0e;
-    --black: #000;
-    --nav-bar: #182d27;
-    --button: rgb(21 132 125 / 20%);
+    --gray: #646464;
+    --dark: #000;
+    --nav-bar: rgb(24 45 39);
+    --nav-title: rgb(221 221 221);
+    --burger-disabled: var(--nav-title);
+    --burger-abled: var(--dark);
+    --button-bg: rgb(21 132 125 / 20%);
     --button-active: rgb(21 132 125 / 40%);
-    --button-text: #15847d;
-    --point: #5ce626;
+    --button-text: rgb(21 132 125);
+    --point: rgb(92 230 38);
+
+    color-scheme: light dark;
 }
 
 * {
@@ -23,8 +26,8 @@ body {
 }
 
 body {
-    background-color: var(--white);
-    color: var(--black);
+    background-color: var(--light);
+    color: var(--dark);
 }
 
 a {
@@ -37,12 +40,18 @@ pre code {
 }
 
 @media (prefers-color-scheme: dark) {
-    html {
-        color-scheme: dark;
+    :root {
+        --light: #222;
+        --light-gray: #646464;
+        --gray: #9b9b9b;
+        --dark: #ddd;
     }
 
-    body {
-        background: var(--dark);
-        color: var(--light);
+    img:not([src*='.svg']) {
+        filter: grayscale(50%);
+
+        &:hover {
+            filter: none;
+        }
     }
 }
