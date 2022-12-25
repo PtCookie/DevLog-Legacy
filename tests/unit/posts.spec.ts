@@ -2,7 +2,7 @@ import { describe, test } from 'mocha';
 import { expect } from 'chai';
 import fs from 'node:fs';
 import path from 'node:path';
-import { countPosts, fetchPostContent } from '../lib/posts';
+import { countPosts, fetchPostContent } from '../../lib/posts';
 
 describe('Post parsing', function () {
   test('parse post content from mdx', function () {

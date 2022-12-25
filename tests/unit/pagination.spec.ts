@@ -1,6 +1,6 @@
 import { describe, test } from 'mocha';
 import { expect } from 'chai';
-import { generatePagination } from '../lib/pagination';
+import { generatePagination } from '../../lib/pagination';
 
 describe('Post pagination', function () {
   test('excerpt starting and ending page numbers', function () {

@@ -3,4 +3,4 @@ extension:
   - ts
   - tsx
 spec:
-  - 'test/**/*.spec.*'
+  - 'tests/unit/**/*.spec.*'
