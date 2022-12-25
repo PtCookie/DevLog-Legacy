@@ -9,7 +9,7 @@ import styles from '../styles/Navigation.module.css';
 
 export default function Navigation() {
   const router = useRouter();
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState<boolean>(false);
 
   return (
     <nav className={styles.container} data-active={active}>
