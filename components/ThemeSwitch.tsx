@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import { BsSunFill, BsMoonFill } from 'react-icons/bs';
+import { useThemeContext } from './context/ThemeProvider';
 import styles from '../styles/Components.module.css';
 
 type Props = {
@@ -7,32 +7,13 @@ type Props = {
 };
 
 export default function ThemeSwitch({ active }: Props) {
-  const [darkMode, setDarkMode] = useState<boolean>(false);
-
-  useEffect(() => {
-    const isDark =
-      localStorage.getItem('theme') !== null
-        ? localStorage.getItem('theme') === 'dark'
-        : window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    if (isDark) {
-      document.documentElement.dataset.theme = 'dark';
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.dataset.theme = 'light';
-      localStorage.setItem('theme', 'light');
-    }
-
-    setDarkMode(isDark);
-  }, []);
+  const [darkMode, setDarkMode] = useThemeContext();
 
   function toggleTheme() {
     if (darkMode) {
       document.documentElement.dataset.theme = 'light';
-      localStorage.setItem('theme', 'light');
     } else {
       document.documentElement.dataset.theme = 'dark';
-      localStorage.setItem('theme', 'dark');
     }
 
     setDarkMode((prevState) => !prevState);
