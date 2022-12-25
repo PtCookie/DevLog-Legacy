@@ -12,10 +12,10 @@ export default function SocialAccounts() {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <BsTwitter size={'1.5rem'} />
+        <BsTwitter size={'24px'} />
       </a>
       <a title="GitHub" href={`https://github.com/${config.github_account}`} target="_blank" rel="noopener noreferrer">
-        <BsGithub size={'1.5rem'} />
+        <BsGithub size={'24px'} />
       </a>
     </div>
   );

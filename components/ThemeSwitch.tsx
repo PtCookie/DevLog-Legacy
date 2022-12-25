@@ -40,7 +40,7 @@ export default function ThemeSwitch({ active }: Props) {
 
   return (
     <div className={styles.theme} data-active={active} onClick={toggleTheme}>
-      {darkMode ? <BsMoonFill size={'1.5rem'} /> : <BsSunFill size={'1.5rem'} />}
+      {darkMode ? <BsMoonFill size={'24px'} /> : <BsSunFill size={'24px'} />}
     </div>
   );
 }
