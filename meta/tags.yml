@@ -9,3 +9,5 @@ tags:
     name: TypeScript
   - slug: css
     name: CSS
+  - slug: shell
+    name: Shell

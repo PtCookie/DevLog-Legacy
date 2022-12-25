@@ -63,20 +63,20 @@ Monorepo를 관리하기 위한 도구로 [Lerna](https://lerna.js.org/) 등이 
 우선 Yarn v2 프로젝트를 생성합니다.
 
 ```shell
-yarn init -2
+$ yarn init -2
 ```
 
 Yarn plugin을 추가합니다.
 
 ```shell
 # yarn upgrade-interactive를 통해 상호작용 가능한 패키지 업그레이드가 가능합니다.
-yarn plugin import interactive-tools
+$ yarn plugin import interactive-tools
 
 # 타입 정의가 없는 패키지 설치 시 가능하면 @types/* 패키지를 함께 설치합니다.
-yarn plugin import typescript
+$ yarn plugin import typescript
 
 # yarn workspaces foreach 등 workspace 관련 커맨드를 추가합니다.
-yarn plugin import workspace-tools
+$ yarn plugin import workspace-tools
 ```
 
 `.yarnrc.yml` 파일을 수정하여 Plug'n'Play 기능을 끕니다. 아직까지는 문제가 발생하는 패키지도 많은 편이고, Yarn v2를 사용하는 라이브러리도 기존의 `node_modules`를 사용하는 경우가 많은 것으로 보여 저는 사용하지 않는 편입니다.
@@ -124,14 +124,14 @@ node_modules/
 
 ```shell
 # ESLint and Prettier
-yarn add -D eslint eslint-config-prettier prettier
+$ yarn add -D eslint eslint-config-prettier prettier
 
 # TypeScript and ESLint plugins
-yarn add -D typesciprt @typescript-eslint/eslint-plugin @typescript-eslint/parser
+$ yarn add -D typesciprt @typescript-eslint/eslint-plugin @typescript-eslint/parser
 
 # Git hook for lint
-yarn add -D husky
-yarn dlx mrm lint-staged
+$ yarn add -D husky
+$ yarn dlx mrm lint-staged
 ```
 
 그 외 `.editorconfig`나 `README.md` 등의 파일을 생성 및 작성합니다.

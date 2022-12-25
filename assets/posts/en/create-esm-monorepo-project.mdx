@@ -63,20 +63,20 @@ This time I'll use [Yarn v2](https://yarnpkg.com/).
 First, create Yarn v2 project.
 
 ```shell
-yarn init -2
+$ yarn init -2
 ```
 
 Add yarn plugins.
 
 ```shell
 # "yarn upgrade-interactive" for interactive package upgrade.
-yarn plugin import interactive-tools
+$ yarn plugin import interactive-tools
 
 # Automatically adds @types/* package if added package doesn't include its own types.
-yarn plugin import typescript
+$ yarn plugin import typescript
 
 # Add some command for manage workspace, like "yarn workspaces foreach".
-yarn plugin import workspace-tools
+$ yarn plugin import workspace-tools
 ```
 
 Edit `.yarnrc.yml` to turn off Plug'n'Play. I prepare to use old `node_modules` as there are some packages still have problem with P'n'P, and other packages use yarn v2 also use `node_modules`.
@@ -124,14 +124,14 @@ Add common dependencies for packages in monorepo.
 
 ```shell
 # ESLint and Prettier
-yarn add -D eslint eslint-config-prettier prettier
+$ yarn add -D eslint eslint-config-prettier prettier
 
 # TypeScript and ESLint plugins
-yarn add -D typesciprt @typescript-eslint/eslint-plugin @typescript-eslint/parser
+$ yarn add -D typesciprt @typescript-eslint/eslint-plugin @typescript-eslint/parser
 
 # Git hook for lint
-yarn add -D husky
-yarn dlx mrm lint-staged
+$ yarn add -D husky
+$ yarn dlx mrm lint-staged
 ```
 
 Finally create and edit `.editorconfig`, `README.md`, etc.
