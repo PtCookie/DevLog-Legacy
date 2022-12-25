@@ -114,22 +114,21 @@
     }
 
     & blockquote {
-        margin: 0 1rem;
+        margin: 0;
 
         &::before {
-            margin-top: 0.1em;
-            margin-left: -0.2em;
+            margin-top: -0.1rem;
             position: absolute;
             z-index: -1;
-            color: var(--light);
-            font-size: 6em;
+            color: var(--point);
+            font-size: 2rem;
             font-family: var(--serif-font), serif;
             line-height: 1.5rem;
-            content: '\201C';
+            content: '\276F';
         }
 
         & p {
-            margin-left: 2.5rem;
+            margin-left: 2rem;
         }
     }
 
