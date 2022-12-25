@@ -42,7 +42,7 @@ Array.from(new Set(duplicatedArray));
 As optional second parameter of `Array.from` is map function to call on every element of the array, so you don't need to use `forEach` or `map` to iterate.
 
 ```typescript
-Array.from([1, 2, 3], (value) => value * 2)
+Array.from([1, 2, 3], (value) => value * 2);
 // [ 2, 4, 6 ]
 ```
 
@@ -63,10 +63,10 @@ function range(start: number, stop: number, step: number): Array<number> {
   return Array.from({ length: (stop - start) / step + 1 }, (_, index) => start + index * step);
 }
 
-range(0, 5, 1)
+range(0, 5, 1);
 // [ 0, 1, 2, 3, 4, 5 ]
 
-range(2, 12, 3)
+range(2, 12, 3);
 // [ 2, 5, 8, 11 ]
 ```
 

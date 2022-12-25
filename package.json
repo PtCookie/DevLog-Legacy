@@ -13,8 +13,10 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint --fix && stylelint --fix ./styles/**/*.css",
-        "format": "prettier --write ./**/*.ts ./**/*.tsx",
+        "lint": "yarn run lint:next && yarn run lint:style",
+        "lint:next": "next lint --fix --ignore-path ./.gitignore",
+        "lint:style": "stylelint --fix --ignore-path ./.gitignore ./**/*.css",
+        "format": "prettier --check --write --ignore-path ./.gitignore ./",
         "test": "mocha"
     },
     "dependencies": {

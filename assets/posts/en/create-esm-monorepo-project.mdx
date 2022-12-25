@@ -14,7 +14,7 @@ description: Make monorepo project with ESM.
   <figcaption>Photo by&nbsp;<a href="https://unsplash.com/@fempreneurstyledstock?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Leone Venter</a>&nbsp;on&nbsp;<a href="https://unsplash.com/s/photos/package?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></figcaption>
 </figure>
 
-`Learn once, write anyware. - React Native`
+> Learn once, write anyware. - React Native
 
 It is welcome comment from [React Native](https://reactnative.dev/).
 Nowaday, it is easy to do so thanks to advances of web technology. So I try to do it myself.
@@ -37,7 +37,7 @@ export default greeter;
 
 ```javascript
 // index.js
-import greeter from './greeter.js'
+import greeter from './greeter.js';
 
 greeter();
 ```
@@ -51,7 +51,7 @@ I think there are more and more npm packages which is pure ESM([node-fetch](http
 
 ### Monorepo
 
-A monorepo(***mono*** + \_\_\_repo\_\_\_sitory) is a repository that contains multiple packages, such as [Babel](https://github.com/babel/babel) or [Webpack CLI](https://webpack.js.org/api/cli/).
+A monorepo(**_mono_** + **_repo_**sitory) is a repository that contains multiple packages, such as [Babel](https://github.com/babel/babel) or [Webpack CLI](https://webpack.js.org/api/cli/).
 
 There are many tools for manage monorepo, like [Lerna](https://lerna.js.org/).
 Package managers like [Yarn](https://yarnpkg.com/features/workspaces) and [pnpm](https://pnpm.io/workspaces) support monorepo through workspace feature. Also, [npm](https://docs.npmjs.com/cli/v7/using-npm/workspaces) supports workspace feature from v7.
@@ -261,36 +261,31 @@ Add `tsconfig.json` since I'll use TypeScript.
 
 ```json
 {
-    "compilerOptions": {
-        "target": "ESNext",
-        "lib": [
-            "ESNext"
-        ],
-        "module": "ESNext",
-        "moduleResolution": "Node",
-        "resolveJsonModule": false,
-        "allowJs": true,
-        "noEmit": true,
-        "importHelpers": true,
-        "isolatedModules": true,
-        "allowSyntheticDefaultImports": true,
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
-        "strict": true,
-        "noFallthroughCasesInSwitch": true,
-        "skipLibCheck": true
-    },
-    "exclude": [
-        "node_modules"
-    ]
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "resolveJsonModule": false,
+    "allowJs": true,
+    "noEmit": true,
+    "importHelpers": true,
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true
+  },
+  "exclude": ["node_modules"]
 }
 ```
 
-* In case of `"module"`, I should be `ES2020` or `ESNext`.
+- In case of `"module"`, I should be `ES2020` or `ESNext`.
   If it is set to `ES2015` or `ES6`, [dynamic](https://www.typescriptlang.org/tsconfig#module) `import` and `import.meta` won't be supported.
 
-* `"resolveJsonModule"` is not supported by ESM yet.
-
+- `"resolveJsonModule"` is not supported by ESM yet.
 
 Now I finished configuration of monorepo's root repository.
 
@@ -298,4 +293,4 @@ Now I finished configuration of monorepo's root repository.
 
 It took quite long to configure project. Next time I'll find some interesting subject and start to develop module.
 
-***ESM confiugration reference -*** [***Pure ESM package | GitHub Gist***](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)
+**_ESM confiugration reference - [Pure ESM package | GitHub Gist](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)_**

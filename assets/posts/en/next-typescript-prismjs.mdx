@@ -27,7 +27,7 @@ First, I used rehype plugin, which is used in Next blog template.
 Rehype plugin can be used as option in serialize function of [next-mdx-remote](https://github.com/hashicorp/next-mdx-remote).
 I choose rehype plugin [@mapbox/rehype-prism](https://github.com/mapbox/rehype-prism), presented as an example in [MDX Syntax highlighting](https://mdxjs.com/guides/syntax-highlighting).
 
-```typescript
+```tsx
 // [post].tsx
 
 import { serialize } from 'next-mdx-remote/serialize';
@@ -35,9 +35,8 @@ import rehypePrism from '@mapbox/rehype-prism';
 
 const mdxSource = await serialize(content, {
   scope: data,
-  mdxOptions: { rehypePlugins: [rehypePrism] }
+  mdxOptions: { rehypePlugins: [rehypePrism] },
 });
-
 ```
 
 There is a problem with this method.
@@ -52,15 +51,13 @@ I can declare global module to run, but I put my mind to find another method.
 // global.d.ts
 
 declare module '@mapbox/rehype-prism';
-
 ```
 
 ## 2. React Hook
 
 Second method is to use useEffect hook of React.
 
-```typescript
-
+```tsx
 import React, { useEffect } from 'react';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
@@ -71,24 +68,20 @@ export default function Code({ code, language }) {
     Prism.highlightAll();
   }, []);
   return (
-    <div className='Code'>
+    <div className="Code">
       <pre>
-        <code className={`language-${language}`}>
-          {code}
-        </code>
+        <code className={`language-${language}`}>{code}</code>
       </pre>
     </div>
   );
 }
-
 ```
 
 _From - [DEV](https://dev.to/amitchauhan/syntax-highlighting-with-prismjs-and-react-1lep)_
 
-
 Apply this code to my project like below.
 
-```typescript
+```tsx
 // [post].tsx
 
 import { useEffect } from 'react';
@@ -102,27 +95,24 @@ export default function Post() {
     Prism.highlightAll();
   }, []);
 }
-
 ```
 
-```typescript
+```tsx
 // _app.tsx
 
 import 'prismjs/themes/prism-tomorrow.css';
-
 ```
 
 ## Summary
 
 There is something missed, in second method.
 
-```typescript
+```tsx
 // [post].tsx
 
 import 'prismjs/components/prism-typescript.min';
 import 'prismjs/components/prism-jsx.min';
 import 'prismjs/components/prism-tsx.min';
-
 ```
 
 I should import language to syntax highlighting.

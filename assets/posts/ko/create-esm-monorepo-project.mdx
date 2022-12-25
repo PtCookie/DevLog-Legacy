@@ -14,7 +14,7 @@ description: ESM으로 Monorepo 프로젝트 만들기.
   <figcaption>Photo by&nbsp;<a href="https://unsplash.com/@fempreneurstyledstock?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Leone Venter</a>&nbsp;on&nbsp;<a href="https://unsplash.com/s/photos/package?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></figcaption>
 </figure>
 
-`Learn once, write anyware. - React Native`
+> Learn once, write anyware. - React Native
 
 [React Native](https://reactnative.dev/) 홈페이지 접속하면 맞아주는 문구입니다.
 요즘에는 웹 기술의 발전으로 쉽게 가능하게 되었습니다. 그리하여 한 번 직접 해보자는 생각에 시작하게 되었습니다.
@@ -37,7 +37,7 @@ export default greeter;
 
 ```javascript
 // index.js
-import greeter from './greeter.js'
+import greeter from './greeter.js';
 
 greeter();
 ```
@@ -261,33 +261,29 @@ TypeScript를 사용하므로 `tsconfig.json` 파일도 설정합니다.
 
 ```json
 {
-    "compilerOptions": {
-        "target": "ESNext",
-        "lib": [
-            "ESNext"
-        ],
-        "module": "ESNext",
-        "moduleResolution": "Node",
-        "resolveJsonModule": false,
-        "allowJs": true,
-        "noEmit": true,
-        "importHelpers": true,
-        "isolatedModules": true,
-        "allowSyntheticDefaultImports": true,
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
-        "strict": true,
-        "noFallthroughCasesInSwitch": true,
-        "skipLibCheck": true
-    },
-    "exclude": [
-        "node_modules"
-    ]
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "resolveJsonModule": false,
+    "allowJs": true,
+    "noEmit": true,
+    "importHelpers": true,
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true
+  },
+  "exclude": ["node_modules"]
 }
 ```
 
 - `"module"`의 경우, `ES2020` 혹은 `ESNext`로 설정하면 됩니다.
-`ES2015`나 `ES6`의 경우 [dynamic `import`와 `import.meta`](https://www.typescriptlang.org/tsconfig#module)를 지원하지 않는다고 합니다.
+  `ES2015`나 `ES6`의 경우 [dynamic `import`와 `import.meta`](https://www.typescriptlang.org/tsconfig#module)를 지원하지 않는다고 합니다.
 - `"resolveJsonModule"`의 경우 ESM에서 아직까지는 지원되지 않는다고 합니다.
 
 이상으로 Monorepo의 루트 저장소 설정은 마무리했습니다.
@@ -296,4 +292,4 @@ TypeScript를 사용하므로 `tsconfig.json` 파일도 설정합니다.
 
 프로젝트 설정에 꽤 시간이 걸렸습니다. 다음에는 적당한 주제를 찾아서 ESM을 만들어 보겠습니다.
 
-___ESM 설정 참조 - [Pure ESM package | GitHub Gist](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)___
+**_ESM 설정 참조 - [Pure ESM package | GitHub Gist](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)_**
