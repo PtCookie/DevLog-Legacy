@@ -44,8 +44,8 @@ As this ESM package, set `"type": "module"`, use `exports` instead of `main`. Ty
 Add `node-fetch` for API invocation, `date-fns` for date format, and `typescript`.
 
 ```shell
-yarn workspace exchange-api add date-fns node-fetch
-yarn workspace exchange-api add -D typescript
+$ yarn workspace exchange-api add date-fns node-fetch
+$ yarn workspace exchange-api add -D typescript
 ```
 
 Create `tsconfig.json`.
@@ -286,7 +286,7 @@ export { exchange as default };
 Use [Jest](https://jestjs.io/) for test package.
 
 ```shell
-yarn workspace exchange-api add -D @babel/core @babel/preset-env @babel/preset-typescript babel-jest jest
+$ yarn workspace exchange-api add -D @babel/core @babel/preset-env @babel/preset-typescript babel-jest jest
 ```
 
 To share test environment across packages, set Babel config and Jest transform in root repository.
@@ -414,7 +414,7 @@ Test `exchange` function to works well with default values and input values, and
 Test the package.
 
 ```shell
-yarn workspace exchange-api test
+$ yarn workspace exchange-api test
 ```
 
 It will pass the test.

@@ -21,13 +21,13 @@ It also has some useful key bindings. Let's look for some of those.
 - `nextd`: `Alt` + `Right`
 
 ```shell
-pwd # $HOME
+$ pwd # $HOME
 
-cd Downloads # pwd: $HOME/Downloads/
+$ cd Downloads # pwd: $HOME/Downloads/
 
-prevd # pwd: $HOME
+$ prevd # pwd: $HOME
 
-nextd # pwd: $HOME/Downloads/
+$ nextd # pwd: $HOME/Downloads/
 ```
 
 ## List directory contents
@@ -37,7 +37,7 @@ nextd # pwd: $HOME/Downloads/
 > if `ls` is alias for something, that alias will be used.
 
 ```shell
-SOME_DIRECTORY # press `Alt` + `L` to list contents of SOME_DIRECTORY
+$ SOME_DIRECTORY/ # press `Alt` + `L` to list contents of SOME_DIRECTORY
 ```
 
 ## Using pager
@@ -46,10 +46,10 @@ SOME_DIRECTORY # press `Alt` + `L` to list contents of SOME_DIRECTORY
 - Open with pager: `Alt` + `O`
 
 ```shell
-cat SOME_LARGE_TEXT # press `Alt` + `P`
-cat SOME_LARGE_TEXT &| less
+$ cat SOME_LARGE_TEXT # press `Alt` + `P`
+$ cat SOME_LARGE_TEXT &| less
 
-SOME_LARGE_TEXT # press `Alt` + `O` to open with pager
+$ SOME_LARGE_TEXT # press `Alt` + `O` to open with pager
 ```
 
 ## Need help
@@ -58,9 +58,9 @@ SOME_LARGE_TEXT # press `Alt` + `O` to open with pager
 - Short description: `Alt` + `W`
 
 ```shell
-cat # press `Alt` + `H` or `F1` to show manpage
+$ cat # press `Alt` + `H` or `F1` to show manpage
 
-cat # press `Alt` + `W` to show description
+$ cat # press `Alt` + `W` to show description
 ```
 
 ## Edit command with external editor
@@ -68,9 +68,9 @@ cat # press `Alt` + `W` to show description
 - Open `$VISUAL` or `$EDITOR`: `Alt` + `E` or `Alt` + `V`
 
 ```shell
-SOME VERY_LONG COMMAND WITH_ARGS # press `Alt` + `E` or `Alt` + `V` to edit
+$ SOME VERY_LONG COMMAND WITH_ARGS # press `Alt` + `E` or `Alt` + `V` to edit
 
-SOME \
+$ SOME \
   VERY_LONG \
   COMMAND \
   WITH_ARGS # After edit
@@ -81,9 +81,9 @@ SOME \
 - Run previous command with `sudo`: `Alt` + `S`
 
 ```shell
-vim /etc/shells # cannot edit without privilege
+$ vim /etc/shells # cannot edit without privilege
 
-sudo vim /etc/shells # press `Alt` + `S` to autocomplete
+$ sudo vim /etc/shells # press `Alt` + `S` to autocomplete
 ```
 
 ## Reference
