@@ -1,0 +1,8 @@
+'*.{js,ts,tsx}':
+  - 'next lint --fix'
+  - 'prettier --write'
+'*.css':
+  - 'stylelint --fix'
+  - 'prettier --write'
+'*.{json,yml}':
+  - 'prettier --write'
