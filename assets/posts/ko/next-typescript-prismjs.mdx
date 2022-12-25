@@ -30,7 +30,7 @@ description: 게시글 내의 코드에 Syntax highlighting 을 적용해보았�
 그 중에서 [MDX Syntax highlighting](https://mdxjs.com/guides/syntax-highlighting) 페이지에서 예제로 제시된
 [@mapbox/rehype-prism](https://github.com/mapbox/rehype-prism)을 사용해보기로 하였습니다.
 
-```typescript
+```tsx
 // [post].tsx
 
 import { serialize } from 'next-mdx-remote/serialize';
@@ -38,9 +38,8 @@ import rehypePrism from '@mapbox/rehype-prism';
 
 const mdxSource = await serialize(content, {
   scope: data,
-  mdxOptions: { rehypePlugins: [rehypePrism] }
+  mdxOptions: { rehypePlugins: [rehypePrism] },
 });
-
 ```
 
 이 방법에는 문제가 있었습니다.
@@ -55,7 +54,6 @@ const mdxSource = await serialize(content, {
 // global.d.ts
 
 declare module '@mapbox/rehype-prism';
-
 ```
 
 ## 2. React Hook
@@ -63,7 +61,6 @@ declare module '@mapbox/rehype-prism';
 두번째로 찾게 된 방법이 React의 useEffect hook을 사용하는 방법이었습니다.
 
 ```tsx
-
 import React, { useEffect } from 'react';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
@@ -74,23 +71,20 @@ export default function Code({ code, language }) {
     Prism.highlightAll();
   }, []);
   return (
-    <div className='Code'>
+    <div className="Code">
       <pre>
-        <code className={`language-${language}`}>
-          {code}
-        </code>
+        <code className={`language-${language}`}>{code}</code>
       </pre>
     </div>
   );
 }
-
 ```
 
 _출처 - [DEV](https://dev.to/amitchauhan/syntax-highlighting-with-prismjs-and-react-1lep)_
 
 위의 코드를 적용하여, 구문 강조를 적용할 수 있었습니다.
 
-```typescript
+```tsx
 // [post].tsx
 
 import { useEffect } from 'react';
@@ -104,27 +98,24 @@ export default function Post() {
     Prism.highlightAll();
   }, []);
 }
-
 ```
 
-```typescript
+```tsx
 // _app.tsx
 
 import 'prismjs/themes/prism-tomorrow.css';
-
 ```
 
 ## Summary
 
 두번째 방법을 통해서 Prism를 적용할 수 있었지만, 아직 해결되지 않은 부분이 있었습니다.
 
-```typescript
+```tsx
 // [post].tsx
 
 import 'prismjs/components/prism-typescript.min';
 import 'prismjs/components/prism-jsx.min';
 import 'prismjs/components/prism-tsx.min';
-
 ```
 
 이처럼 사용할 언어를 미리 import 해야하는 점이었습니다.

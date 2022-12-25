@@ -24,6 +24,7 @@ Bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/can
 
 - [Mocha](https://mochajs.org/)
 - [Chai](https://www.chaijs.com/)
+- [Playwright](https://playwright.dev/)
 
 ### Code quality tools
 

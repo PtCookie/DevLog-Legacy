@@ -53,11 +53,8 @@ Create `tsconfig.json`.
 ```json
 // packages/exchange-api/tsconfig.json
 {
-    "extends": "../../tsconfig.json",
-    "include": [
-        "**/*.js",
-        "**/*.ts"
-    ]
+  "extends": "../../tsconfig.json",
+  "include": ["**/*.js", "**/*.ts"]
 }
 ```
 
@@ -66,16 +63,14 @@ It will refer to root `tsconfig.json`. And one more config file for TypeScript b
 ```json
 // packages/exchange-api/tsconfig.build.json
 {
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-        "noEmit": false,
-        "outDir": "./lib",
-        "newLine": "lf",
-        "declaration": true
-    },
-    "include": [
-        "src"
-    ]
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": "./lib",
+    "newLine": "lf",
+    "declaration": true
+  },
+  "include": ["src"]
 }
 ```
 
@@ -294,17 +289,17 @@ To share test environment across packages, set Babel config and Jest transform i
 ```json
 // babel.config.json
 {
-    "presets": [
-        [
-            "@babel/preset-env",
-            {
-                "targets": {
-                    "node": "current"
-                }
-            }
-        ],
-        "@babel/preset-typescript"
-    ]
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": "current"
+        }
+      }
+    ],
+    "@babel/preset-typescript"
+  ]
 }
 ```
 

@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React from 'react';
+import { ReactNode } from 'react';
 import { serif, monospace } from '../../lib/fonts';
 import { getAuthor } from '../../lib/authors';
 import { getTag } from '../../lib/tags';
@@ -22,7 +22,7 @@ type Props = {
   tags: string[];
   author: string;
   description?: string;
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
 export default function PostLayout({ title, date, slug, author, tags, description = '', children }: Props) {

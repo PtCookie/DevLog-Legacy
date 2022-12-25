@@ -1,10 +1,10 @@
 import Head from 'next/head';
-import React from 'react';
+import { ReactNode } from 'react';
 import Navigation from '../Navigation';
 import styles from '../../styles/Layout.module.css';
 
 type Props = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
 export default function DefaultLayout({ children }: Props) {
