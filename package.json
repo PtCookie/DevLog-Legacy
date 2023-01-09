@@ -45,7 +45,7 @@
         "yaml-loader": "^0.8.0"
     },
     "devDependencies": {
-        "@playwright/test": "^1.29.1",
+        "@playwright/test": "^1.29.2",
         "@types/chai": "^4.3.4",
         "@types/mocha": "^10.0.1",
         "chai": "^4.3.7",
