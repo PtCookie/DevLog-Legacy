@@ -2,9 +2,9 @@ name: Mocha Tests
 
 on:
   push:
-    branches: ['main']
+    branches: ['main', 'staging']
   pull_request:
-    branches: ['main']
+    branches: ['main', 'staging']
 
 env:
   HUSKY: 0
@@ -12,6 +12,9 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    env:
+      HUSKY: 0
 
     strategy:
       matrix:
