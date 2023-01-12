@@ -3,7 +3,7 @@
 echo "VERCEL_GIT_COMMIT_REF: $VERCEL_GIT_COMMIT_REF"
 
 case $VERCEL_GIT_COMMIT_REF in
-  "dependabot"* | "feature"*)
+  "dependabot"* | "feature"* | "main")
     echo "🛑 - Build cancelled"
     exit 0;
     ;;
