@@ -7,7 +7,7 @@ const sansSerif = localFont({
 
 const serif = Noto_Serif_KR({
   weight: ['200', '300', '400', '500', '600', '700', '900'],
-  subsets: ['korean', 'latin'],
+  subsets: ['latin'],
   variable: '--serif-font',
 });
 
