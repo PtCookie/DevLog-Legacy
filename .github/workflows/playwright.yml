@@ -2,15 +2,21 @@ name: Playwright Tests
 
 on:
   push:
-    branches: ['main']
+    branches: ['staging']
   pull_request:
-    branches: ['main']
+    branches: ['staging']
+
+env:
+  HUSKY: 0
 
 jobs:
   test:
     timeout-minutes: 60
 
     runs-on: ubuntu-latest
+
+    env:
+      HUSKY: 0
 
     strategy:
       matrix:
