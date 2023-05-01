@@ -26,7 +26,7 @@
         "gray-matter": "^4.0.3",
         "highlight.js": "^11.8.0",
         "js-yaml": "^4.1.0",
-        "next": "^13.2.4",
+        "next": "^13.3.2",
         "next-mdx-remote": "^4.4.1",
         "postcss": "^8.4.21",
         "postcss-flexbugs-fixes": "^5.0.2",
