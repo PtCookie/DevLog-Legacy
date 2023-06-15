@@ -17,14 +17,12 @@ import styles from './PostLayout.module.css';
 type Props = {
   title: string;
   date: Date;
-  slug: string;
   tags: string[];
   author: string;
-  description?: string;
   children: ReactNode;
 };
 
-export default function PostLayout({ title, date, slug, author, tags, description = '', children }: Props) {
+export default function PostLayout({ title, date, author, tags, children }: Props) {
   // TODO Get locale from params
   const locale = 'ko';
 

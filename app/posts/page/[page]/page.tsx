@@ -66,7 +66,6 @@ async function getPage(locale: string, page: number) {
   };
 
   return {
-    page,
     posts,
     tags,
     pagination,

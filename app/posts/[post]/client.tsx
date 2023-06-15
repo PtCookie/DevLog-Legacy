@@ -11,14 +11,12 @@ import 'highlight.js/styles/base16/tomorrow-night.css';
 type Props = {
   title: string;
   dateString: string;
-  slug: string;
   tags: string[];
   author: string;
-  description?: string;
   source: MDXRemoteSerializeResult;
 };
 
-export default function Post({ title, dateString, slug, tags, author, description = '', source }: Props) {
+export default function Post({ title, dateString, tags, author, source }: Props) {
   useEffect(() => {
     highlight.configure({
       ignoreUnescapedHTML: true,
@@ -27,14 +25,7 @@ export default function Post({ title, dateString, slug, tags, author, descriptio
   }, []);
 
   return (
-    <PostLayout
-      title={title}
-      date={parseISO(dateString)}
-      slug={slug}
-      tags={tags}
-      author={author}
-      description={description}
-    >
+    <PostLayout title={title} date={parseISO(dateString)} tags={tags} author={author}>
       <MDXRemote {...source} />
     </PostLayout>
   );
