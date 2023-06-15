@@ -6,20 +6,19 @@ import Index from './client';
 
 import type { Metadata } from 'next';
 
+const dynamicParams = false;
+
+type PathProps = {
+  params: {
+    lang: string;
+  };
+};
+
 type Props = {
   params: {
     slug: Array<string>;
   };
 };
-
-export async function generateMetadata({ params: { slug: queries } }: Props): Promise<Metadata> {
-  const [slug, page] = [queries[0], queries[1]];
-  const tag = getTag(slug);
-  const url = `/posts/tags/${tag.name}` + (page ? `/${page}` : '');
-  const title = tag.name;
-
-  return generateBaseMetadata({ title, url });
-}
 
 export default async function IndexPage({ params: { slug } }: Props) {
   // TODO Get locale from params
@@ -29,13 +28,14 @@ export default async function IndexPage({ params: { slug } }: Props) {
   return <Index {...paginationData} />;
 }
 
-export const dynamicParams = false;
+export async function generateMetadata({ params: { slug: queries } }: Props): Promise<Metadata> {
+  const [slug, page] = [queries[0], queries[1]];
+  const tag = getTag(slug);
+  const url = `/posts/tags/${tag.name}` + (page ? `/${page}` : '');
+  const title = tag.name;
 
-type PathProps = {
-  params: {
-    lang: string;
-  };
-};
+  return generateBaseMetadata({ title, url });
+}
 
 export async function generateStaticParams({}: PathProps) {
   // TODO Get locale from params
@@ -98,3 +98,5 @@ async function getTags(locale: string, queries: Array<string>) {
     pagination,
   };
 }
+
+export { dynamicParams };

@@ -13,22 +13,19 @@ import Post from './client';
 
 import type { Metadata } from 'next';
 
+const dynamicParams = false;
+
+type PathProps = {
+  params: {
+    lang: string;
+  };
+};
+
 type Props = {
   params: {
     post: string;
   };
 };
-
-export async function generateMetadata({ params: { post } }: Props): Promise<Metadata> {
-  // TODO Get locale from params
-  const locale = 'ko';
-  const slug = post;
-  const { title, tags, description, author } = await getPost(locale, post);
-  const url = `/posts/${slug}`;
-  const keywords: Array<string> = tags.map((keyword: string) => getTag(keyword).name);
-
-  return generateBaseMetadata({ title, description, keywords, url, author: getAuthor(author).name });
-}
 
 export default async function PostPage({ params: { post } }: Props) {
   // TODO Get locale from params
@@ -52,13 +49,16 @@ export default async function PostPage({ params: { post } }: Props) {
   );
 }
 
-export const dynamicParams = false;
+export async function generateMetadata({ params: { post } }: Props): Promise<Metadata> {
+  // TODO Get locale from params
+  const locale = 'ko';
+  const slug = post;
+  const { title, tags, description, author } = await getPost(locale, post);
+  const url = `/posts/${slug}`;
+  const keywords: Array<string> = tags.map((keyword: string) => getTag(keyword).name);
 
-type PathProps = {
-  params: {
-    lang: string;
-  };
-};
+  return generateBaseMetadata({ title, description, keywords, url, author: getAuthor(author).name });
+}
 
 export async function generateStaticParams({}: PathProps) {
   // TODO Get locale from params
@@ -112,3 +112,5 @@ async function getPost(locale: string, post: string) {
     source: mdxSource,
   };
 }
+
+export { dynamicParams };

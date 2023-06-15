@@ -6,19 +6,19 @@ import Posts from './client';
 
 import type { Metadata } from 'next';
 
-export async function generateMetadata(): Promise<Metadata> {
-  const title = 'All posts';
-  const url = '/posts';
-
-  return generateBaseMetadata({ title, url });
-}
-
 export default async function PostsPage() {
   // TODO Get locale from params
   const locale = 'ko';
   const posts = await getPosts(locale);
 
   return <Posts {...posts} />;
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const title = 'All posts';
+  const url = '/posts';
+
+  return generateBaseMetadata({ title, url });
 }
 
 async function getPosts(locale: string) {

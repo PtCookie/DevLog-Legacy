@@ -6,18 +6,19 @@ import Page from './client';
 
 import type { Metadata } from 'next';
 
+const dynamicParams = false;
+
+type PathProps = {
+  params: {
+    lang: string;
+  };
+};
+
 type Props = {
   params: {
     page: string;
   };
 };
-
-export async function generateMetadata({ params: { page } }: Props): Promise<Metadata> {
-  const url = `/posts/page/${page}`;
-  const title = 'All posts';
-
-  return generateBaseMetadata({ title, url });
-}
 
 export default async function PagePage({ params: { page } }: Props) {
   // TODO Get locale from params
@@ -27,13 +28,12 @@ export default async function PagePage({ params: { page } }: Props) {
   return <Page {...paginationData} />;
 }
 
-export const dynamicParams = false;
+export async function generateMetadata({ params: { page } }: Props): Promise<Metadata> {
+  const url = `/posts/page/${page}`;
+  const title = 'All posts';
 
-type PathProps = {
-  params: {
-    lang: string;
-  };
-};
+  return generateBaseMetadata({ title, url });
+}
 
 export async function generateStaticParams({}: PathProps) {
   // const paths: Array<{ params: { page: string }; locale?: string }> = [];
@@ -76,3 +76,5 @@ async function getPage(locale: string, page: number) {
     pagination,
   };
 }
+
+export { dynamicParams };
