@@ -1,6 +1,7 @@
 import { BsSunFill, BsMoonFill } from 'react-icons/bs';
-import { useThemeContext } from './context/ThemeProvider';
-import styles from '../styles/Components.module.css';
+import { useThemeContext } from '@/components/context/ThemeProvider';
+
+import styles from './ThemeSwitch.module.css';
 
 type Props = {
   active: boolean;

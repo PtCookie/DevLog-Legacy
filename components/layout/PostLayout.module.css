@@ -1,24 +1,3 @@
-.default {
-    padding: 5rem 0;
-    height: 100%;
-    display: block;
-
-    @media (min-width: 769px) {
-        padding: 4rem 0;
-        display: flex;
-        flex: 1 0 auto;
-    }
-
-    & main {
-        min-height: 100%;
-        display: flex;
-
-        @media (min-width: 769px) {
-            flex: 1 0 auto;
-        }
-    }
-}
-
 .post {
     margin: 0 auto;
     padding: 0 1.5rem;
@@ -27,7 +6,7 @@
     width: 100%;
     z-index: 0;
 
-    @media (min-width: 769px) {
+    @media (width >= 769px) {
         display: flex;
         flex-direction: column;
     }
@@ -94,7 +73,7 @@
         margin: 2rem 0 0;
         line-height: 1.25em;
 
-        @media (min-width: 769px) {
+        @media (width >= 769px) {
             position: relative;
         }
     }
@@ -108,7 +87,7 @@
         font-size: 1.5rem;
         content: '#';
 
-        @media (min-width: 769px) {
+        @media (width >= 769px) {
             display: block;
         }
     }

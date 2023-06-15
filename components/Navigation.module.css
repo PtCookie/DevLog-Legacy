@@ -15,7 +15,7 @@
         opacity: 1;
     }
 
-    @media (min-width: 769px) {
+    @media (width >= 769px) {
         position: static;
         top: auto;
         width: auto;
@@ -40,7 +40,7 @@
         display: none;
     }
 
-    @media (min-width: 769px) {
+    @media (width >= 769px) {
         display: none;
     }
 }
@@ -48,7 +48,7 @@
 .content {
     width: 0;
 
-    @media (min-width: 769px) {
+    @media (width >= 769px) {
         width: 7rem;
         display: block;
     }
@@ -71,7 +71,7 @@
         text-align: right;
         list-style: none;
 
-        @media (min-width: 769px) {
+        @media (width >= 769px) {
             width: 7rem;
             top: auto;
             display: block;
@@ -93,7 +93,7 @@
             margin-bottom: 0;
         }
 
-        @media (min-width: 769px) {
+        @media (width >= 769px) {
             padding: 0;
             gap: 0.5rem;
             font-size: 1rem;
@@ -114,7 +114,7 @@
 .icon {
     font-size: 2rem;
 
-    @media (min-width: 769px) {
+    @media (width >= 769px) {
         font-size: 1.25rem;
     }
 }

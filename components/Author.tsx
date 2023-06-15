@@ -1,4 +1,4 @@
-import styles from '../styles/Components.module.css';
+import styles from './Author.module.css';
 
 type Props = {
   author: Author;

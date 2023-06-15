@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { RxGlobe } from 'react-icons/rx';
-import styles from '../styles/Components.module.css';
+
+import styles from './LocaleSelector.module.css';
 
 type Props = {
   active: boolean;

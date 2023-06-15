@@ -1,8 +1,9 @@
+import Link from 'next/link';
 import React from 'react';
-import Pagination from './Pagination';
-import PostItem from './PostItem';
-import TagLink from './TagLink';
-import styles from '../styles/Post.module.css';
+import Pagination from '@/components/Pagination';
+import PostItem from '@/components/PostItem';
+
+import styles from './PostList.module.css';
 
 type Props = {
   posts: Array<PostContent>;
@@ -36,7 +37,9 @@ export default function PostList({ posts, tags, pagination }: Props) {
       <ul className={styles.category}>
         {tags.map((tag, index) => (
           <li key={index}>
-            <TagLink tag={tag} />
+            <Link href={'/posts/tags/[[...slug]]'} as={`/posts/tags/${tag.slug}`}>
+              {'#' + tag.name}
+            </Link>
           </li>
         ))}
       </ul>

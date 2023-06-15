@@ -1,7 +1,8 @@
 import React from 'react';
 import { BsGithub, BsTwitter } from 'react-icons/bs';
-import config from '../lib/config';
-import styles from '../styles/Components.module.css';
+import config from '@/lib/config';
+
+import styles from './SocialAccounts.module.css';
 
 export default function SocialAccounts() {
   return (

@@ -1,0 +1,19 @@
+.theme {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top: 1.25rem;
+    right: 1rem;
+    color: var(--nav-item-disabled);
+    z-index: 2;
+
+    @media (width >= 769px) {
+        inset: auto auto 12rem 5.5rem;
+        display: flex;
+        color: var(--nav-item-enabled);
+    }
+
+    &[data-active='true'] {
+        color: var(--nav-item-enabled);
+    }
+}

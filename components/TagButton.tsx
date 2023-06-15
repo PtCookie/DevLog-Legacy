@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import styles from '../styles/Components.module.css';
+
+import styles from './TagButton.module.css';
 
 type Props = {
   tag: Tag;

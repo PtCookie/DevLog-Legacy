@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { jsonLdScriptProps } from 'react-schemaorg';
 import { BlogPosting } from 'schema-dts';
 import { formatISO } from 'date-fns';
-import config from '../../lib/config';
+import config from '@/lib/config';
 
 type Props = {
   url: string;

@@ -1,0 +1,17 @@
+.pagination {
+    margin: 3rem 0 0;
+    padding: 0;
+    list-style: none;
+
+    & li {
+        margin-right: 1em;
+        display: inline-block;
+        color: var(--light-gray);
+        font-size: 1.25rem;
+    }
+
+    & a[data-active='true'] {
+        color: var(--gray);
+        font-weight: bold;
+    }
+}
