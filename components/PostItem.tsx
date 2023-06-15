@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { parseISO } from 'date-fns';
-import DateDisplay from './DateDisplay';
-import styles from '../styles/Post.module.css';
+import DateDisplay from '@/components/DateDisplay';
+
+import styles from './PostItem.module.css';
 
 type Props = {
   post: PostContent;

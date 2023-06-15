@@ -1,4 +1,4 @@
-import styles from '../styles/Components.module.css';
+import styles from './Copyright.module.css';
 
 export default function Copyright() {
   return (

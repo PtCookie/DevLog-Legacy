@@ -36,16 +36,7 @@
         margin-bottom: 0.75em;
     }
 
-    @media (min-width: 769px) {
+    @media (width >= 769px) {
         display: block;
-    }
-}
-
-.item {
-    display: inline-block;
-
-    & h2 {
-        margin: 0;
-        font-weight: 500;
     }
 }

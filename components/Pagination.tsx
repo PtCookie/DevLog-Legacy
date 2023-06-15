@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import { generatePagination } from '../lib/pagination';
-import styles from '../styles/Components.module.css';
+import { generatePagination } from '@/lib/pagination';
+
+import styles from './Pagination.module.css';
 
 type Props = {
   current: number;

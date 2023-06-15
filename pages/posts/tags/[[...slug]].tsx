@@ -1,12 +1,12 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
-import config from '../../../lib/config';
-import { countPosts, listPostContent } from '../../../lib/posts';
-import { getTag, listTags } from '../../../lib/tags';
-import DefaultLayout from '../../../components/layout/DefaultLayout';
-import BasicMeta from '../../../components/meta/BasicMeta';
-import OpenGraphMeta from '../../../components/meta/OpenGraphMeta';
-import TwitterCardMeta from '../../../components/meta/TwitterCardMeta';
-import TagPostList from '../../../components/TagPostList';
+import config from '@/lib/config';
+import { countPosts, listPostContent } from '@/lib/posts';
+import { getTag, listTags } from '@/lib/tags';
+import DefaultLayout from '@/components/layout/DefaultLayout';
+import BasicMeta from '@/components/meta/BasicMeta';
+import OpenGraphMeta from '@/components/meta/OpenGraphMeta';
+import TwitterCardMeta from '@/components/meta/TwitterCardMeta';
+import TagPostList from '@/components/TagPostList';
 
 type Props = {
   posts: PostContent[];

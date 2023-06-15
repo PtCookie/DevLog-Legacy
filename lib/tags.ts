@@ -1,4 +1,4 @@
-import tags from '../meta/tags.yml';
+import tags from '@/meta/tags.yml';
 
 const tagMap: { [key: string]: Tag } = generateTagMap();
 

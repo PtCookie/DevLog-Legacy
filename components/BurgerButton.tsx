@@ -1,4 +1,4 @@
-import styles from '../styles/Components.module.css';
+import styles from './BurgerButton.module.css';
 
 type Props = {
   active: boolean;

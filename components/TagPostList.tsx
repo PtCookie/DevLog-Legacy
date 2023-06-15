@@ -1,7 +1,8 @@
 import React from 'react';
-import Pagination from './Pagination';
-import PostItem from './PostItem';
-import styles from '../styles/Components.module.css';
+import Pagination from '@/components/Pagination';
+import PostItem from '@/components/PostItem';
+
+import styles from './TagPostList.module.css';
 
 type Props = {
   posts: PostContent[];

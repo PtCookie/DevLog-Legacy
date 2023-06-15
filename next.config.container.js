@@ -8,6 +8,7 @@ const nextConfig = {
     locales: ['ko', 'en'],
     defaultLocale: 'ko',
   },
+  output: 'standalone',
   reactStrictMode: true,
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     config.module.rules.push(

@@ -1,0 +1,13 @@
+.button {
+    padding: 0.25em 0.5em;
+    display: inline-block;
+    border-radius: 3px;
+    background: var(--button-bg);
+    color: var(--button-text);
+    transition: background 0.3s ease, color 0.5s ease, background-color 0.5s ease;
+
+    &:active,
+    &:hover {
+        background: var(--button-active);
+    }
+}
