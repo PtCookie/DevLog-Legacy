@@ -5,7 +5,8 @@ import { FcHome, FcReading } from 'react-icons/fc';
 import BurgerButton from './BurgerButton';
 import LocaleSelector from './LocaleSelector';
 import ThemeSwitch from './ThemeSwitch';
-import styles from '../styles/Navigation.module.css';
+
+import styles from './Navigation.module.css';
 
 export default function Navigation() {
   const router = useRouter();

@@ -1,7 +1,8 @@
 import Head from 'next/head';
 import { ReactNode } from 'react';
-import Navigation from '../Navigation';
-import styles from '../../styles/Layout.module.css';
+import Navigation from '@/components/Navigation';
+
+import styles from './DefaultLayout.module.css';
 
 type Props = {
   children: ReactNode;
@@ -18,7 +19,7 @@ export default function DefaultLayout({ children }: Props) {
         <link rel="apple-touch-icon" href="/icon256.png" />
       </Head>
       <Navigation />
-      <main>{children}</main>
+      <section>{children}</section>
     </div>
   );
 }

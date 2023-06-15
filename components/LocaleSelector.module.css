@@ -1,0 +1,43 @@
+.locale {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    bottom: 4rem;
+    right: 2rem;
+    display: none;
+    align-items: flex-end;
+    gap: 1rem;
+    list-style: none;
+    font-size: 1.25rem;
+    z-index: 2;
+
+    @media (width >= 769px) {
+        left: 0;
+        width: 7rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &[data-active='true'] {
+        display: flex;
+        animation: fade-in 200ms linear 0s normal forwards;
+    }
+
+    & li {
+        cursor: pointer;
+    }
+
+    & li[data-active='true'] {
+        text-decoration: underline;
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

@@ -1,6 +1,7 @@
 import { format, formatISO } from 'date-fns';
 import { ko, enUS } from 'date-fns/locale';
-import styles from '../styles/Components.module.css';
+
+import styles from './DateDisplay.module.css';
 
 type Props = {
   date: Date;

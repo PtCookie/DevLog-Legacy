@@ -1,7 +1,8 @@
-import { ThemeProvider } from '../components/context/ThemeProvider';
-import { sansSerif } from '../lib/fonts';
+import { ThemeProvider } from '@/components/context/ThemeProvider';
+import { sansSerif } from '@/lib/fonts';
+
 import '@csstools/normalize.css';
-import '../styles/globals.css';
+import '@/assets/globals.css';
 
 import type { AppProps } from 'next/app';
 

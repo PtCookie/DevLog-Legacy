@@ -7,12 +7,13 @@ import yaml from 'js-yaml';
 import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import highlight from 'highlight.js';
-import config from '../../lib/config';
-import { fetchPostContent } from '../../lib/posts';
-import PostLayout from '../../components/layout/PostLayout';
+import config from '@/lib/config';
+import { fetchPostContent } from '@/lib/posts';
+import PostLayout from '@/components/layout/PostLayout';
+
 import 'highlight.js/styles/base16/tomorrow-night.css';
 
-export type Props = {
+type Props = {
   title: string;
   dateString: string;
   slug: string;

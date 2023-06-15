@@ -1,0 +1,20 @@
+.default {
+    padding: 5rem 0;
+    height: 100%;
+    display: block;
+
+    @media (width >= 769px) {
+        padding: 4rem 0;
+        display: flex;
+        flex: 1 0 auto;
+    }
+
+    & section {
+        min-height: 100%;
+        display: flex;
+
+        @media (width >= 769px) {
+            flex: 1 0 auto;
+        }
+    }
+}

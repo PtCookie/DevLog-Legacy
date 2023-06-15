@@ -1,0 +1,8 @@
+.item {
+    display: inline-block;
+
+    & h2 {
+        margin: 0;
+        font-weight: 500;
+    }
+}
