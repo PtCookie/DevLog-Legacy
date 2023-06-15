@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { parseISO } from 'date-fns';
 import DateDisplay from '@/components/DateDisplay';
 
@@ -10,7 +9,8 @@ type Props = {
 };
 
 export default function PostItem({ post }: Props) {
-  const { locale } = useRouter();
+  // TODO Get locale from params
+  const locale = 'ko';
 
   return (
     <Link href={'/posts/' + post.slug} className={styles.item}>

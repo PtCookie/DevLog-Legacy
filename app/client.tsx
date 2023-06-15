@@ -1,18 +1,14 @@
-import { useRouter } from 'next/router';
+'use client';
+
 import DefaultLayout from '@/components/layout/DefaultLayout';
 import SocialAccounts from '@/components/SocialAccounts';
-import BasicMeta from '@/components/meta/BasicMeta';
-import OpenGraphMeta from '@/components/meta/OpenGraphMeta';
-import TwitterCardMeta from '@/components/meta/TwitterCardMeta';
 
 export default function Home() {
-  const { locale } = useRouter();
+  // TODO Get locale from params
+  const locale = 'ko';
 
   return (
     <DefaultLayout>
-      <BasicMeta url={'/'} />
-      <OpenGraphMeta url={'/'} />
-      <TwitterCardMeta />
       <div className={'container'}>
         <div>
           <h1>

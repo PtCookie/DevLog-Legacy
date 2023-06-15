@@ -1,18 +1,16 @@
-import { useRouter } from 'next/router';
-import { ReactNode } from 'react';
+'use client';
+
 import { serif, monospace } from '@/lib/fonts';
 import { getAuthor } from '@/lib/authors';
 import { getTag } from '@/lib/tags';
 import DefaultLayout from './DefaultLayout';
-import BasicMeta from '@/components/meta/BasicMeta';
-import JsonLdMeta from '@/components/meta/JsonLdMeta';
-import OpenGraphMeta from '@/components/meta/OpenGraphMeta';
-import TwitterCardMeta from '@/components/meta/TwitterCardMeta';
 import Author from '@/components/Author';
 import Copyright from '@/components/Copyright';
 import DateDisplay from '@/components/DateDisplay';
 import SocialAccounts from '@/components/SocialAccounts';
 import TagButton from '@/components/TagButton';
+
+import type { ReactNode } from 'react';
 
 import styles from './PostLayout.module.css';
 
@@ -27,23 +25,11 @@ type Props = {
 };
 
 export default function PostLayout({ title, date, slug, author, tags, description = '', children }: Props) {
-  const { locale } = useRouter();
-  const keywords = tags.map((keyword) => getTag(keyword).name);
-  const authorName = getAuthor(author).name;
+  // TODO Get locale from params
+  const locale = 'ko';
 
   return (
     <DefaultLayout>
-      <BasicMeta url={`/posts/${slug}`} title={title} keywords={keywords} description={description} />
-      <JsonLdMeta
-        url={`/posts/${slug}`}
-        title={title}
-        keywords={keywords}
-        date={date}
-        author={authorName}
-        description={description}
-      />
-      <OpenGraphMeta url={`/posts/${slug}`} title={title} description={description} />
-      <TwitterCardMeta />
       <div className={styles.post}>
         <article className={[serif.variable, monospace.variable].join(' ')}>
           <header>
