@@ -27,35 +27,40 @@ export default async function PagePage({ params: { page } }: Props) {
   return <Page {...paginationData} />;
 }
 
-// TODO Fix for App router
-// export const dynamicParams = false;
-//
-// export async function generateStaticParams(locales: Array<string> | string) {
-//   const paths: Array<{ params: { page: string }; locale?: string }> = [];
-//
-//   if (locales instanceof Array) {
-//     for (const locale of locales) {
-//       const pages = Math.ceil(countPosts(locale as SupportedLocale) / config.posts_per_page);
-//       const localePaths = Array.from({ length: pages - 1 }, (_, page) => {
-//         return { params: { page: (page + 2).toString() }, locale };
-//       });
-//
-//       paths.push(...localePaths);
-//     }
-//   } else {
-//     const pages = Math.ceil(countPosts() / config.posts_per_page);
-//     const localePaths = Array.from({ length: pages - 1 }, (_, page) => {
-//       return { params: { page: (page + 2).toString() } };
-//     });
-//
-//     paths.push(...localePaths);
-//   }
-//
-//   return {
-//     paths: paths,
-//     fallback: false,
-//   };
-// }
+export const dynamicParams = false;
+
+type PathProps = {
+  params: {
+    lang: string;
+  };
+};
+
+export async function generateStaticParams({}: PathProps) {
+  // const paths: Array<{ params: { page: string }; locale?: string }> = [];
+  //
+  // if (locales instanceof Array) {
+  //   for (const locale of locales) {
+  //     const pages = Math.ceil(countPosts(locale as SupportedLocale) / config.posts_per_page);
+  //     const localePaths = Array.from({ length: pages - 1 }, (_, page) => {
+  //       return { params: { page: (page + 2).toString() }, locale };
+  //     });
+  //
+  //     paths.push(...localePaths);
+  //   }
+  // } else {
+  //   const pages = Math.ceil(countPosts() / config.posts_per_page);
+  //   const localePaths = Array.from({ length: pages - 1 }, (_, page) => {
+  //     return { params: { page: (page + 2).toString() } };
+  //   });
+  //
+  //   paths.push(...localePaths);
+  // }
+
+  const pages = Math.ceil(countPosts() / config.posts_per_page);
+  return Array.from({ length: pages - 1 }, (_, page) => {
+    return { page: (page + 2).toString() };
+  });
+}
 
 async function getPage(locale: string, page: number) {
   const posts = listPostContent(page, config.posts_per_page, locale as SupportedLocale);

@@ -1,5 +1,5 @@
 import { generateBaseMetadata } from '@/components/meta/generateBaseMetadata';
-import { getTag } from '@/lib/tags';
+import { getTag, listTags } from '@/lib/tags';
 import { countPosts, listPostContent } from '@/lib/posts';
 import config from '@/lib/config';
 import Index from './client';
@@ -29,43 +29,54 @@ export default async function IndexPage({ params: { slug } }: Props) {
   return <Index {...paginationData} />;
 }
 
-// TODO Fix for App router
-// export const dynamicParams = false;
-//
-// export async function generateStaticParams(locales: Array<string> | string) {
-//   const paths: Array<{ params: { slug: string[] }; locale?: string }> = [];
-//
-//   if (locales instanceof Array) {
-//     for (const locale of locales) {
-//       const slugPath = listTags().flatMap((tag) => {
-//         const pages = Math.ceil(countPosts(locale as SupportedLocale, tag.slug) / config.posts_per_page);
-//
-//         return Array.from({ length: pages }, (_, page) => {
-//           return page === 0
-//             ? { params: { slug: [tag.slug] }, locale }
-//             : { params: { slug: [tag.slug, (page + 1).toString()] }, locale };
-//         });
-//       });
-//
-//       paths.push(...slugPath);
-//     }
-//   } else {
-//     const slugPath = listTags().flatMap((tag) => {
-//       const pages = Math.ceil(countPosts(undefined, tag.slug) / config.posts_per_page);
-//
-//       return Array.from({ length: pages }, (_, page) => {
-//         return page === 0 ? { params: { slug: [tag.slug] } } : { params: { slug: [tag.slug, (page + 1).toString()] } };
-//       });
-//     });
-//
-//     paths.push(...slugPath);
-//   }
-//
-//   return {
-//     paths: paths,
-//     fallback: false,
-//   };
-// }
+export const dynamicParams = false;
+
+type PathProps = {
+  params: {
+    lang: string;
+  };
+};
+
+export async function generateStaticParams({}: PathProps) {
+  // TODO Get locale from params
+  const locale = 'ko';
+
+  // const paths: Array<{ params: { slug: string[] }; locale?: string }> = [];
+  //
+  // if (locales instanceof Array) {
+  //   for (const locale of locales) {
+  //     const slugPath = listTags().flatMap((tag) => {
+  //       const pages = Math.ceil(countPosts(locale as SupportedLocale, tag.slug) / config.posts_per_page);
+  //
+  //       return Array.from({ length: pages }, (_, page) => {
+  //         return page === 0
+  //           ? { params: { slug: [tag.slug] }, locale }
+  //           : { params: { slug: [tag.slug, (page + 1).toString()] }, locale };
+  //       });
+  //     });
+  //
+  //     paths.push(...slugPath);
+  //   }
+  // } else {
+  //   const slugPath = listTags().flatMap((tag) => {
+  //     const pages = Math.ceil(countPosts(undefined, tag.slug) / config.posts_per_page);
+  //
+  //     return Array.from({ length: pages }, (_, page) => {
+  //       return page === 0 ? { params: { slug: [tag.slug] } } : { params: { slug: [tag.slug, (page + 1).toString()] } };
+  //     });
+  //   });
+  //
+  //   paths.push(...slugPath);
+  // }
+
+  return listTags().flatMap((tag) => {
+    const pages = Math.ceil(countPosts(undefined, tag.slug) / config.posts_per_page);
+
+    return Array.from({ length: pages }, (_, page) => {
+      return page === 0 ? { slug: [tag.slug] } : { slug: [tag.slug, (page + 1).toString()] };
+    });
+  });
+}
 
 async function getTags(locale: string, queries: Array<string>) {
   const [slug, page] = [queries[0], queries[1]];

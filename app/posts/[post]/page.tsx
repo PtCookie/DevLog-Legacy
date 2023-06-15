@@ -52,33 +52,38 @@ export default async function PostPage({ params: { post } }: Props) {
   );
 }
 
-// TODO Fix for App router
-// export const dynamicParams = false;
-//
-// export async function generateStaticParams(locales: Array<string> | string) {
-//   const paths: Array<{ params: { post: string }; locale?: string }> = [];
-//
-//   if (locales instanceof Array) {
-//     for (const locale of locales) {
-//       const postPath = fetchPostContent(locale as SupportedLocale).map((post) => {
-//         return { params: { post: post.slug }, locale };
-//       });
-//
-//       paths.push(...postPath);
-//     }
-//   } else {
-//     const postPath = fetchPostContent().map((post) => {
-//       return { params: { post: '/posts/' + post.slug } };
-//     });
-//
-//     paths.push(...postPath);
-//   }
-//
-//   return {
-//     paths,
-//     fallback: false,
-//   };
-// }
+export const dynamicParams = false;
+
+type PathProps = {
+  params: {
+    lang: string;
+  };
+};
+
+export async function generateStaticParams({}: PathProps) {
+  // TODO Get locale from params
+  const locale = 'ko';
+
+  // const paths: Array<{ params: { post: string }; locale?: string }> = [];
+  //
+  // if (locales instanceof Array) {
+  //   for (const locale of locales) {
+  //     const postPath = fetchPostContent(locale as SupportedLocale).map((post) => {
+  //       return { params: { post: post.slug }, locale };
+  //     });
+  //
+  //     paths.push(...postPath);
+  //   }
+  // } else {
+  //   const postPath = fetchPostContent().map((post) => {
+  //     return { params: { post: '/posts/' + post.slug } };
+  //   });
+  //
+  //   paths.push(...postPath);
+  // }
+
+  return fetchPostContent(locale as SupportedLocale).map((postData) => ({ post: postData.slug }));
+}
 
 async function getPost(locale: string, post: string) {
   const slug = post;
