@@ -1,4 +1,3 @@
-import React from 'react';
 import { BsGithub, BsTwitter } from 'react-icons/bs';
 import config from '@/lib/config';
 
