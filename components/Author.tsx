@@ -5,9 +5,5 @@ type Props = {
 };
 
 export default function Author({ author }: Props) {
-  return (
-    <>
-      <span className={styles.author}>{author.name}</span>
-    </>
-  );
+  return <span className={styles.author}>{author.name}</span>;
 }

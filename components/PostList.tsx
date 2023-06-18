@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import React from 'react';
 import Pagination from '@/components/Pagination';
 import PostItem from '@/components/PostItem';
 

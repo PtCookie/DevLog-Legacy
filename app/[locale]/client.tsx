@@ -1,18 +1,15 @@
-import { useRouter } from 'next/router';
+'use client';
+
+import { usePathname } from 'next/navigation';
 import DefaultLayout from '@/components/layout/DefaultLayout';
 import SocialAccounts from '@/components/SocialAccounts';
-import BasicMeta from '@/components/meta/BasicMeta';
-import OpenGraphMeta from '@/components/meta/OpenGraphMeta';
-import TwitterCardMeta from '@/components/meta/TwitterCardMeta';
 
 export default function Home() {
-  const { locale } = useRouter();
+  const pathname = usePathname();
+  const locale = pathname.split('/')?.[1];
 
   return (
     <DefaultLayout>
-      <BasicMeta url={'/'} />
-      <OpenGraphMeta url={'/'} />
-      <TwitterCardMeta />
       <div className={'container'}>
         <div>
           <h1>
