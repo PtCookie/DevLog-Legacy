@@ -27,18 +27,13 @@ export default function PostList({ posts, tags, pagination }: Props) {
         <Pagination
           current={pagination.current}
           pages={pagination.pages}
-          link={{
-            href: (page) => (page === 1 ? '/posts' : '/posts/page/[page]'),
-            as: (page) => (page === 1 ? '' : '/posts/page/' + page),
-          }}
+          link={(page) => (page === 1 ? '/posts' : `/posts/page/${page}`)}
         />
       </div>
       <ul className={styles.category}>
         {tags.map((tag, index) => (
           <li key={index}>
-            <Link href={'/posts/tags/[[...slug]]'} as={`/posts/tags/${tag.slug}`}>
-              {'#' + tag.name}
-            </Link>
+            <Link href={`/posts/tags/${tag.slug}`}>{'#' + tag.name}</Link>
           </li>
         ))}
       </ul>
