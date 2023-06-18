@@ -1,5 +1,6 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import { serif, monospace } from '@/lib/fonts';
 import { getAuthor } from '@/lib/authors';
 import { getTag } from '@/lib/tags';
@@ -23,8 +24,8 @@ type Props = {
 };
 
 export default function PostLayout({ title, date, author, tags, children }: Props) {
-  // TODO Get locale from params
-  const locale = 'ko';
+  const pathname = usePathname();
+  const locale = pathname.split('/')?.[1];
 
   return (
     <DefaultLayout>

@@ -6,9 +6,13 @@ import Posts from './client';
 
 import type { Metadata } from 'next';
 
-export default async function PostsPage() {
-  // TODO Get locale from params
-  const locale = 'ko';
+type Props = {
+  params: {
+    locale: string;
+  };
+};
+
+export default async function PostsPage({ params: { locale } }: Props) {
   const posts = await getPosts(locale);
 
   return <Posts {...posts} />;

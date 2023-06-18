@@ -1,11 +1,12 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import DefaultLayout from '@/components/layout/DefaultLayout';
 import SocialAccounts from '@/components/SocialAccounts';
 
 export default function Home() {
-  // TODO Get locale from params
-  const locale = 'ko';
+  const pathname = usePathname();
+  const locale = pathname.split('/')?.[1];
 
   return (
     <DefaultLayout>

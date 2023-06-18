@@ -6,6 +6,7 @@ import { serialize } from 'next-mdx-remote/serialize';
 import { generateBaseMetadata } from '@/components/meta/generateBaseMetadata';
 import JsonLd from '@/components/meta/JsonLd';
 import config from '@/lib/config';
+import { i18n } from '@/lib/i18n';
 import { fetchPostContent } from '@/lib/posts';
 import { getTag } from '@/lib/tags';
 import { getAuthor } from '@/lib/authors';
@@ -15,21 +16,14 @@ import type { Metadata } from 'next';
 
 const dynamicParams = false;
 
-type PathProps = {
-  params: {
-    lang: string;
-  };
-};
-
 type Props = {
   params: {
+    locale: string;
     post: string;
   };
 };
 
-export default async function PostPage({ params: { post } }: Props) {
-  // TODO Get locale from params
-  const locale = 'ko';
+export default async function PostPage({ params: { locale, post } }: Props) {
   const postData = await getPost(locale, post);
   const keywords: Array<string> = postData.tags.map((keyword: string) => getTag(keyword).name);
   const authorName = getAuthor(postData.author).name;
@@ -49,9 +43,7 @@ export default async function PostPage({ params: { post } }: Props) {
   );
 }
 
-export async function generateMetadata({ params: { post } }: Props): Promise<Metadata> {
-  // TODO Get locale from params
-  const locale = 'ko';
+export async function generateMetadata({ params: { locale, post } }: Props): Promise<Metadata> {
   const slug = post;
   const { title, tags, description, author } = await getPost(locale, post);
   const url = `/posts/${slug}`;
@@ -60,29 +52,19 @@ export async function generateMetadata({ params: { post } }: Props): Promise<Met
   return generateBaseMetadata({ title, description, keywords, url, author: getAuthor(author).name });
 }
 
-export async function generateStaticParams({}: PathProps) {
-  // TODO Get locale from params
-  const locale = 'ko';
+export async function generateStaticParams({ params: { locale } }: Props) {
+  const { locales } = i18n;
+  const paths: Array<{ post: string; locale: string }> = [];
 
-  // const paths: Array<{ params: { post: string }; locale?: string }> = [];
-  //
-  // if (locales instanceof Array) {
-  //   for (const locale of locales) {
-  //     const postPath = fetchPostContent(locale as SupportedLocale).map((post) => {
-  //       return { params: { post: post.slug }, locale };
-  //     });
-  //
-  //     paths.push(...postPath);
-  //   }
-  // } else {
-  //   const postPath = fetchPostContent().map((post) => {
-  //     return { params: { post: '/posts/' + post.slug } };
-  //   });
-  //
-  //   paths.push(...postPath);
-  // }
+  for (const locale of locales) {
+    const postPath = fetchPostContent(locale as SupportedLocale).map((post) => {
+      return { post: post.slug, locale };
+    });
 
-  return fetchPostContent(locale as SupportedLocale).map((postData) => ({ post: postData.slug }));
+    paths.push(...postPath);
+  }
+
+  return paths;
 }
 
 async function getPost(locale: string, post: string) {

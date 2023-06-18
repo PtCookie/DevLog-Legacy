@@ -1,6 +1,8 @@
+import { NextIntlClientProvider } from 'next-intl';
 import { ThemeProvider } from '@/components/context/ThemeProvider';
 import config from '@/lib/config';
 import { sansSerif } from '@/lib/fonts';
+import { i18n } from '@/lib/i18n';
 
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
@@ -10,7 +12,22 @@ import '@/assets/globals.css';
 
 type Props = {
   children: ReactNode;
+  params: {
+    locale: SupportedLocale;
+  };
 };
+
+export default function AppLayout({ children, params: { locale } }: Props) {
+  return (
+    <html lang={locale}>
+      <body style={sansSerif.style}>
+        <NextIntlClientProvider locale={locale}>
+          <ThemeProvider>{children}</ThemeProvider>
+        </NextIntlClientProvider>
+      </body>
+    </html>
+  );
+}
 
 export const metadata: Metadata = {
   title: {
@@ -25,13 +42,6 @@ export const metadata: Metadata = {
   manifest: '/blog.webmanifest',
 };
 
-export default function AppLayout({ children }: Props) {
-  // TODO Get html lang from locale
-  return (
-    <html lang="ko">
-      <body style={sansSerif.style}>
-        <ThemeProvider>{children}</ThemeProvider>
-      </body>
-    </html>
-  );
+export async function generateStaticParams() {
+  return i18n.locales.map((locale) => ({ locale }));
 }

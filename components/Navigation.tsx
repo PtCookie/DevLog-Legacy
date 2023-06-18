@@ -12,7 +12,6 @@ export default function Navigation() {
   const pathname = usePathname();
   const [active, setActive] = useState<boolean>(false);
 
-  // TODO Fix LocaleSelector
   return (
     <nav className={styles.container} data-active={active}>
       <BurgerButton active={active} onClick={() => setActive(!active)} />
@@ -36,7 +35,7 @@ export default function Navigation() {
         </ul>
       </div>
       <ThemeSwitch active={active} />
-      {/*<LocaleSelector active={active} />*/}
+      <LocaleSelector active={active} />
     </nav>
   );
 }

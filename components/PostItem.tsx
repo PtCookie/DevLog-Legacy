@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { parseISO } from 'date-fns';
 import DateDisplay from '@/components/DateDisplay';
 
@@ -9,8 +10,8 @@ type Props = {
 };
 
 export default function PostItem({ post }: Props) {
-  // TODO Get locale from params
-  const locale = 'ko';
+  const pathname = usePathname();
+  const locale = pathname.split('/')?.[1];
 
   return (
     <Link href={'/posts/' + post.slug} className={styles.item}>
