@@ -13,6 +13,7 @@ Bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/can
 ### Styling
 
 - [PostCSS](https://postcss.org/)
+- [styled-jsx](https://github.com/vercel/styled-jsx/)
 - [normalize.css](https://csstools.github.io/normalize.css/)
 - [React Icons](https://react-icons.github.io/react-icons/)
 

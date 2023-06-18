@@ -1,49 +1,34 @@
-import { useRouter } from 'next/router';
-import { ReactNode } from 'react';
+'use client';
+
+import { usePathname } from 'next/navigation';
 import { serif, monospace } from '@/lib/fonts';
 import { getAuthor } from '@/lib/authors';
 import { getTag } from '@/lib/tags';
 import DefaultLayout from './DefaultLayout';
-import BasicMeta from '@/components/meta/BasicMeta';
-import JsonLdMeta from '@/components/meta/JsonLdMeta';
-import OpenGraphMeta from '@/components/meta/OpenGraphMeta';
-import TwitterCardMeta from '@/components/meta/TwitterCardMeta';
 import Author from '@/components/Author';
 import Copyright from '@/components/Copyright';
 import DateDisplay from '@/components/DateDisplay';
 import SocialAccounts from '@/components/SocialAccounts';
 import TagButton from '@/components/TagButton';
 
+import type { ReactNode } from 'react';
+
 import styles from './PostLayout.module.css';
 
 type Props = {
   title: string;
   date: Date;
-  slug: string;
   tags: string[];
   author: string;
-  description?: string;
   children: ReactNode;
 };
 
-export default function PostLayout({ title, date, slug, author, tags, description = '', children }: Props) {
-  const { locale } = useRouter();
-  const keywords = tags.map((keyword) => getTag(keyword).name);
-  const authorName = getAuthor(author).name;
+export default function PostLayout({ title, date, author, tags, children }: Props) {
+  const pathname = usePathname();
+  const locale = pathname.split('/')?.[1];
 
   return (
     <DefaultLayout>
-      <BasicMeta url={`/posts/${slug}`} title={title} keywords={keywords} description={description} />
-      <JsonLdMeta
-        url={`/posts/${slug}`}
-        title={title}
-        keywords={keywords}
-        date={date}
-        author={authorName}
-        description={description}
-      />
-      <OpenGraphMeta url={`/posts/${slug}`} title={title} description={description} />
-      <TwitterCardMeta />
       <div className={styles.post}>
         <article className={[serif.variable, monospace.variable].join(' ')}>
           <header>

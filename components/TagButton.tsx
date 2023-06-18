@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from 'next-intl/link';
 
 import styles from './TagButton.module.css';
 
@@ -8,10 +8,8 @@ type Props = {
 
 export default function TagButton({ tag }: Props) {
   return (
-    <>
-      <Link href={'/posts/tags/[[...slug]]'} className={styles.button} as={`/posts/tags/${tag.slug}`}>
-        #{tag.name}
-      </Link>
-    </>
+    <Link href={'/posts/tags/[[...slug]]'} as={`/posts/tags/${tag.slug}`} className={styles.button}>
+      #{tag.name}
+    </Link>
   );
 }

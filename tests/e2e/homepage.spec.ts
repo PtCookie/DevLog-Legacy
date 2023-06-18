@@ -1,12 +1,15 @@
 import { test, expect } from '@playwright/test';
+import { i18n } from '@/lib/i18n';
 
 test.describe('Homepage', () => {
   test('should has title and links to posts page', async ({ page }) => {
+    const { defaultLocale } = i18n;
+
     await page.goto('/');
     await expect(page).toHaveTitle(/PtCookie\.DevLog/);
 
     const locator = page.getByRole('link', { name: 'posts' });
-    await expect(locator).toHaveAttribute('href', '/posts');
+    await expect(locator).toHaveAttribute('href', `/${defaultLocale}/posts`);
 
     await locator.click();
     await expect(page).toHaveURL(/posts/);

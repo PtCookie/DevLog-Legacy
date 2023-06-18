@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import Link from 'next-intl/link';
+import { usePathname } from 'next/navigation';
 import { parseISO } from 'date-fns';
 import DateDisplay from '@/components/DateDisplay';
 
@@ -10,7 +10,8 @@ type Props = {
 };
 
 export default function PostItem({ post }: Props) {
-  const { locale } = useRouter();
+  const pathname = usePathname();
+  const locale = pathname.split('/')?.[1];
 
   return (
     <Link href={'/posts/' + post.slug} className={styles.item}>
