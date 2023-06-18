@@ -23,8 +23,8 @@ export default function JsonLd({ url, title, keywords, date, author, image, desc
         headline: title,
         keywords: keywords ? keywords.join(',') : undefined,
         datePublished: formatISO(date),
-        author: author,
-        image: image,
+        author: [{ '@type': 'Person', name: author, url: config.base_url }],
+        image: image || `${config.base_url}/og_image.png`,
         description: description,
       })}
     />
