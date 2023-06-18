@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from 'next-intl/link';
 import { usePathname } from 'next/navigation';
 import { parseISO } from 'date-fns';
 import DateDisplay from '@/components/DateDisplay';

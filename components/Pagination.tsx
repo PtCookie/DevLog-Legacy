@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from 'next-intl/link';
 import { generatePagination } from '@/lib/pagination';
 
 import styles from './Pagination.module.css';

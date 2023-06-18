@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import Link from 'next-intl/link';
 import { ThemeProvider } from '@/components/context/ThemeProvider';
 import DefaultLayout from '@/components/layout/DefaultLayout';
 
